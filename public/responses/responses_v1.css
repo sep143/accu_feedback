@@ -1,0 +1,151 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jul 4, 2018, 1:24:29 PM
+    Author     : Ankit
+*/
+
+
+    .unread-toggle[data-v-d39bd79a] {
+    background: #fafafa;
+    border: 1px solid #e6e6e6;
+    border-bottom: transparent;
+    border-radius: 4px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    padding: 10px 10px 0;
+}
+.unread-toggle>.toggle-checkbox[data-v-d39bd79a] {
+    margin-right: 5px;
+    padding: 0;
+}
+
+.checkbox-inline, .radio-inline {
+    cursor: default;
+    margin-right: 15px;
+    margin-top: 0;
+    display: inline-block;
+}
+.pull-right {
+    float: right;
+}
+.pull-right {
+    float: right!important;
+}
+.checkbox-inline, .radio-inline {
+    position: relative;
+    display: inline-block;
+    padding-left: 20px;
+    margin-bottom: 0;
+    vertical-align: middle;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.response-selector[data-v-d39bd79a] {
+    border: 1px solid #e6e6e6;
+    border-radius: 4px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    height: 458px;
+}
+.scroller[data-v-d39bd79a] {
+    height: 500px;
+    overflow-y: auto;
+}
+.list-group {
+    margin-bottom: 20px;
+    padding-left: 0;
+}
+.response-selector .list-group-item[data-v-d39bd79a] {
+    border: 0;
+    border-left: 2px solid transparent;
+}
+.list-group-item:first-child {
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+}
+a.list-group-item, button.list-group-item {
+    color: #555;
+}
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+.response-selector span.time[data-v-d39bd79a] {
+    font-size: 12px;
+    display: block;
+}
+.response-selector span.location[data-v-d39bd79a] {
+    font-size: 14px;
+    display: block;
+    font-weight: 700;
+}
+.response-selector span.device[data-v-d39bd79a] {
+    font-size: 14px;
+    display: block;
+}
+.response-selector .score-display span.score-title[data-v-d39bd79a] {
+    font-size: 9px;
+}
+.response-selector .score-display span.score[data-v-d39bd79a] {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+}
+//responses view
+.response-meta-display[data-v-d39bd79a] {
+    background: #e6e6e6;
+    border: 1px solid #e6e6e6;
+    border-radius: 4px;
+    padding: 10px;
+}
+.response-meta-display span.location[data-v-d39bd79a] {
+    font-weight: 700;
+    display: block;
+}
+.response-meta-display span.device[data-v-d39bd79a], .response-meta-display span.time[data-v-d39bd79a] {
+    display: block;
+}
+.response-meta-display span.score[data-v-d39bd79a] {
+    display: block;
+}
+.response-view[data-v-d39bd79a] {
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 4px;
+    padding: 10px;
+}
+.scroller[data-v-d39bd79a] {
+    height: 500px;
+    overflow-y: auto;
+}
+.conversation .conversation-item:first-child div.left[data-v-7fab6d66] {
+    margin-top: 0;
+}
+.conversation .conversation-item .left[data-v-7fab6d66] {
+    background: #ebecf0;
+    margin: 10px 0 0;
+}
+.conversation .conversation-item>div[data-v-7fab6d66] {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+.conversation .conversation-item .right[data-v-7fab6d66] {
+    background: #5af;
+    color: #fff;
+    margin: 5px 0 10px 20px;
+}
+.conversation .conversation-item>div[data-v-7fab6d66] {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 10px;
+}

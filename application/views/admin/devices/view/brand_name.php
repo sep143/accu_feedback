@@ -1,0 +1,1 @@
+<?= $branding_name->b_brand_name; ?>

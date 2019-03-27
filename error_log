@@ -1,0 +1,4 @@
+[27-Jul-2018 16:26:20 Asia/Kolkata] PHP Fatal error:  Call to a member function sha1() on null in /home/kcetechn/public_html/project_1/application/models/admin/Auth_model.php on line 87
+[27-Jul-2018 17:22:57 Asia/Kolkata] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in /home/kcetechn/public_html/project_1/application/controllers/admin/LoginController.php on line 176
+[27-Jul-2018 17:23:18 Asia/Kolkata] PHP Parse error:  syntax error, unexpected ',' in /home/kcetechn/public_html/project_1/application/controllers/admin/LoginController.php on line 176
+[27-Jul-2018 17:24:16 Asia/Kolkata] PHP Parse error:  syntax error, unexpected ',' in /home/kcetechn/public_html/project_1/application/controllers/admin/LoginController.php on line 176

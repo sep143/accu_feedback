@@ -1,0 +1,6 @@
+ .home {
+        background-image: url ("image\demo.jpg");
+        height: 200px;
+        background-color:#000;
+        background-repeat: no-repeat, repeat;
+    }
