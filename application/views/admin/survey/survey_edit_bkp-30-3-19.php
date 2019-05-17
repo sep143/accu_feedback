@@ -76,12 +76,11 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                     <div class="box">
                         <div class="box-body">
                             <input type="hidden" name="sequence_no[]" id="sequence<?= $Qcount+11; ?>" value="<?= $json_data['question'][$Qcount]['sequence_no']; ?>">
-                            <input type="hidden" name="sequence_delete[]" id="sequence_delete<?= $Qcount+11; ?>">
                             
                             <div class="form-group input-group" style="padding: 19px 17px; background: #eff0f4; margin-top: -20px; margin-right: -21px; margin-left: -21px;">
                                 <div class="input-group-addon order" style="background: #9c9cb0; color: white;"><?= $q; ?></div>
                                 <textarea class="form-control" rows="2" name="question[]" id="qType<?= $Qcount+11; ?>" required=""><?= $json_data['question'][$Qcount]['text']['en']; ?></textarea>
-                                <div class="input-group-addon" id="remove_field<?= $Qcount+11; ?>" data-seqid="<?= $Qcount; ?>" style="background: #eff0f4; color: #337ab7; cursor: pointer;"><i class="fa fa-close"></i></div>
+                                <div class="input-group-addon" id="remove_field<?= $Qcount+11; ?>" style="background: #eff0f4; color: #337ab7; cursor: pointer;"><i class="fa fa-close"></i></div>
                             </div>
                            
                             <div class="col-md-12">
@@ -154,7 +153,7 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                               ?>
                                 <div class="col-md-12">
                                     <div class="form-group col-md-3">
-                                        <select class="form-control" name="optionData[<?= $Qcount; ?>][]">
+                                        <select class="form-control" name="optionData[<?= $i-1; ?>][]">
                                        <?php if($json_data['question'][$Qcount]['options']['en'][$count]['type'] == 'text' or 'email' or 'checkbox' or 'number' or 'date' or 'phone'){
                                          ?>
                                             <option value="<?= $json_data['question'][$Qcount]['options']['en'][$count]['type']?>" selected=""><?= $json_data['question'][$Qcount]['options']['en'][$count]['type']?></option>
@@ -170,17 +169,16 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                     </div>
                                     <div class="col-md-1"></div>
                                     <div class="col-md-6 form-group">
-                                        <input type="text" id="o_name<?= $Qcount+11; ?><?= $count+11; ?>" name="dataField[<?= $Qcount; ?>][]" value="<?= set_value('dataField[<?= $i-1; ?>][]',$json_data['question'][$Qcount]['options']['en'][$count]['label']) ?>" class="form-control">
+                                        <input type="text" id="o_name<?= $Qcount+11; ?><?= $count+11; ?>" name="dataField[<?= $i-1; ?>][]" value="<?= set_value('dataField[<?= $i-1; ?>][]',$json_data['question'][$Qcount]['options']['en'][$count]['label']) ?>" class="form-control">
                                     </div>
                                     <div class="col-md-1"></div>
                                     <div class="col-md-2 form-group">
                                         <?php if($json_data['question'][$Qcount]['options']['en'][$count]['required'] == 'YES'){ ?>
-                                        <div class="checkbox"> 
-                                            <input type="checkbox" value="NO" name="dataFieldmen[<?= $Qcount; ?>][]" checked="checked"><span>Mandatory</span> </div>
+                                        <div class="checkbox"> <input type="checkbox" value="NO" name="dataFieldmen[<?= $i-1; ?>][]" checked="checked"><span>Mandatory</span> </div>
                                        <?php }else{ ?>
                                            <div class="checkbox">
-                                               <input type="hidden" name="dataFieldmen[<?= $Qcount ?>][]" value="NO"> 
-                                               <input type="checkbox" name="dataFieldmen[<?= $Qcount; ?>][]" value="YES"><span>Mandatory</span> </div>
+                                               <input type="hidden" name="dataFieldmen[<?= $i-1; ?>][]" value="NO"> 
+                                               <input type="checkbox" name="dataFieldmen[<?= $i-1; ?>][]" value="YES"><span>Mandatory</span> </div>
                                       <?php } ?>
                                     </div>
                                  </div>
@@ -207,7 +205,7 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                         <label class="control-label"><b>Question Rows</b></label>
                                      <?php foreach ($json_data['question'][$Qcount]['options']['en']['matrix_row'] as $count=>$dt): ?>
                                         <div class="" style="margin:10px;">
-                                            <input class="form-control" type="text" id="o_name<?= $Qcount+11; ?><?= $count+11; ?>" name="optionMetrix[<?= $Qcount; ?>][]" placeholder="" value="<?= $json_data['question'][$Qcount]['options']['en']['matrix_row'][$count]; ?>"/>
+                                            <input class="form-control" type="text" id="o_name<?= $Qcount+11; ?><?= $count+11; ?>" name="optionMetrix[<?= $i-1; ?>][]" placeholder="" value="<?= $json_data['question'][$Qcount]['options']['en']['matrix_row'][$count]; ?>"/>
                                         </div>
                                       <?php  endforeach; ?>
                                         <div class="" id="matrixQuView<?= $Qcount+11; ?>">  </div><br>
@@ -219,7 +217,7 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                         <label class="control-label" for="parameterValue"><b>Answer Columns</b></label>
                                     <?php foreach ($json_data['question'][$Qcount]['options']['en']['matrix_column'] as $count=>$dt): ?>  
                                         <div class="" style="margin:10px;">
-                                            <input class="form-control" id="ob_name<?= $count+11; ?>" type="text" name="metrixAnswer[<?= $Qcount; ?>][]" placeholder="" value="<?= $json_data['question'][$Qcount]['options']['en']['matrix_column'][$count]; ?>"/>
+                                            <input class="form-control" id="ob_name<?= $count+11; ?>" type="text" name="metrixAnswer[<?= $i-1; ?>][]" placeholder="" value="<?= $json_data['question'][$Qcount]['options']['en']['matrix_column'][$count]; ?>"/>
                                         </div>
                                     <?php  endforeach; ?>
                                     <?php if($adminRole == 2 || $otherRole == 11){ ?>
@@ -349,8 +347,7 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                 <div class="col-md-7">\n\
                     <div class="box iBox"><!--<a href="" id="remove_field" class="fa fa-plus pull-right"></a>-->\n\
                          <div class="box-body">\n\
-                            <input type="hidden" name="sequence_no[]" id="sequence_'+ x +'" value="'+ (q_id + 1) +'">\n\\n\
-                            <input type="hidden" name="sequence_delete['+q_id+']" id="sequence_delete">\n\
+                            <input type="hidden" name="sequence_no[]" id="sequence_'+ x +'" value="'+ (q_id + 1) +'">\n\
                             <div class="form-group input-group" style="padding: 19px 17px; background: #eff0f4; margin-top: -20px; margin-right: -21px; margin-left: -21px;">\n\
                                 <div class="input-group-addon order" style="background: #9c9cb0; color: white;">'+z+'</div>\n\
                                 <textarea class="form-control" rows="2" name="question[]" id="qType'+x+'" required=""></textarea>\n\
@@ -358,14 +355,14 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                             </div>\n\
                             <div class="col-md-12">\n\
                                 <div class="form-group col-md-7">\n\
-                                    <select class="form-control" name="survey_type[]" id="survey_select'+x+'">\n\
+                                    <select class="form-control" name="survey_type['+ q_id +']" id="survey_select'+x+'">\n\
                                         <?php foreach ($types as $row): ?>\n\
                                         <option class="form-control" value="<?= $row->t_id; ?>"> <?= $row->type_options; ?></option>\n\
                                         <?php endforeach; ?>\n\
                                     </select>\n\
                                 </div>\n\
                                 <div class="col-md-5">\n\
-                                    <input type="hidden" value="NO" name="mandatory[]"> <input type="checkbox" name="mandatory[]" class="" value="YES">\n\
+                                    <input type="hidden" name="mandatory[]" value="NO"><input type="checkbox" name="mandatory['+ q_id +']" class="" value="YES">\n\
                                     <label class="">Mandatory</label>\n\
                                 </div>\n\
                             </div>\n\
@@ -1297,12 +1294,8 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
         $('#remove_field<?= $Qcount+11; ?>').on("click", function (e) { //user click on remove text
             e.preventDefault();
            // if($("div.order").lenght > 1){
-                var seqid = $(this).data('seqid');
-                $('#sequence_delete<?= $Qcount+11; ?>').val(seqid);
-                $(this).parent().parent().parent().closest('div').hide();
-                $('#delTypeDiv<?= $Qcount+11; ?>').closest('div').hide();
-//                $(this).parent().parent().parent().closest('div').remove();
-//                $('#delTypeDiv<?= $Qcount+11; ?>').closest('div').remove();
+                $(this).parent().parent().parent().closest('div').remove();
+                $('#delTypeDiv<?= $Qcount+11; ?>').closest('div').remove();
                 $('div.order').text(function (x){
                     //return <?= $q = $q; ?>;
                 });

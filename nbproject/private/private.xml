@@ -2,14 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/xampp/htdocs/project_1/application/views/admin/responses/response_table_v.php</file>
-            <file>file:/C:/xampp/htdocs/project_1/application/libraries/Excel.php</file>
-            <file>file:/C:/xampp/htdocs/project_1/application/views/admin/responses/responses_table_result.php</file>
-            <file>file:/C:/xampp/htdocs/project_1/application/controllers/admin/Excel_export_Controller.php</file>
-            <file>file:/C:/xampp/htdocs/project_1/application/controllers/admin/Responses_C.php</file>
-            <file>file:/C:/xampp/htdocs/project_1/application/models/admin/Responses_model.php</file>
-            <file>file:/C:/xampp/htdocs/project_1/application/models/admin/Excel_model.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

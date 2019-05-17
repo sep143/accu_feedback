@@ -92,15 +92,18 @@ div.dataTables_wrapper {
                     <div class="inline" style="flex: 1, padding:10px;">
                         <!--<button class="btn btn-default" id="downloadXls"><i class="fa fa-download"></i> Download</button>-->
                         <form action="<?= site_url('excel_download'); ?>" method="post">
+                        <!--<form action="<?= site_url('excel_download_check'); ?>" method="post">-->
                             <button class="btn btn-default" type="submit"><i class="fa fa-download"></i> Download</button>
                             <?php
                             
                             ?>
                             <input type="hidden" name="survey_id" id="survey_excel" value="<?php if(!empty($survey_ses)){ echo $survey_ses;}; ?>">
-                            <input type="hidden" name="" value="<?php if(!empty($d_rang_date)){ echo $d_rang_date;}; ?>">
                             <input type="hidden" name="startDate" id="startdate_excel" value="<?php if(!empty($from_date_ses)){ echo $from_date_ses;}; ?>">
                             <input type="hidden" name="endDate" id="enddate_excel" value="<?php if(!empty($to_date_ses)){echo $to_date_ses;}; ?>">
+                            <input type="hidden" name="waiter_id1" id="waiterid_excel" value="all">
+                            <input type="hidden" name="device_id1" id="deviceid_excel" value="all">
                             <input type="hidden" name="" value="<?php if(!empty($filter_ses)){echo $filter_ses;}; ?>">
+                            <input type="hidden" name="" value="<?php if(!empty($d_rang_date)){ echo $d_rang_date;}; ?>">
                         </form>
                     </div>
                     <div class="inline" style="flex: 1, padding:10px;">
@@ -542,6 +545,7 @@ div.dataTables_wrapper {
             var survey_id = $('#survey_form').val();
             var fromDate = $('#datepicker').val();
             var toDate = $('#endDatePicker').val();
+            $('#waiterid_excel').val(waiter_code);
             $('#loading').show();
             $.ajax({
                 url:"<?= site_url('admin/Responses_C/get_waiter')?>",
@@ -566,6 +570,7 @@ div.dataTables_wrapper {
             var survey_id = $('#survey_form').val();
             var fromDate = $('#datepicker').val();
             var toDate = $('#endDatePicker').val();
+            $('#deviceid_excel').val(get_device);
             $('#loading').show();
             $.ajax({
                 url:'<?= site_url('admin/Responses_C/get_device'); ?>',

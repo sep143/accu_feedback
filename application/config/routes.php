@@ -124,3 +124,4 @@ $route['api/failer'] = 'admin/api/Example/failer';
 
 //excel export
 $route['excel_download'] = 'admin/Excel_export_Controller';
+$route['excel_download_check'] = 'admin/Excel_export_Controller/check_excel';

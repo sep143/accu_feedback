@@ -86,11 +86,13 @@ class Responses_C extends MY_Controller{
             if($waiter_code == 'all'){
             $data['tableView']= $this->Responses_model->get_response_for_waiter_all($survey_id2, $id, $fromDate, $toDate);
             $data['question'] = $this->Responses_model->get_device_data_question($survey_id2,$id);
+            $data['type'] = $this->Survey_model->all_type_get();
             $this->load->view('admin/responses/responses_table_result', $data);
             }
             else{
             $data['tableView']= $this->Responses_model->get_response_for_waiter($survey_id2, $waiter_code, $id, $fromDate, $toDate);
             $data['question'] = $this->Responses_model->get_question($survey_id2,$id);
+            $data['type'] = $this->Survey_model->all_type_get();
             $this->load->view('admin/responses/responses_table_result', $data);
             }
         }else if($role == 'chart'){ //this data view in table formate but all data view
@@ -136,10 +138,12 @@ class Responses_C extends MY_Controller{
            if($device_imei == 'all'){
             $data['tableView']= $this->Responses_model->get_device_data_responses_noimei($id, $survey_id2, $fromDate, $toDate);
             $data['question'] = $this->Responses_model->get_device_data_question($survey_id2,$id);
+            $data['type'] = $this->Survey_model->all_type_get();
             $this->load->view('admin/responses/responses_table_result', $data);
            }else{
             $data['tableView']= $this->Responses_model->get_device_data_responses($id, $survey_id2, $device_imei, $fromDate, $toDate);
             $data['question'] = $this->Responses_model->get_device_data_question($survey_id2,$id);
+            $data['type'] = $this->Survey_model->all_type_get();
             $this->load->view('admin/responses/responses_table_result', $data);
            }
        }else if($role == 'chart'){
@@ -227,6 +231,7 @@ class Responses_C extends MY_Controller{
             $date = $this->input->post('dateOption');
             $now = new DateTime();
             $current = (new DateTime())->format('Y-m-d');
+            $data['type'] = $this->Survey_model->all_type_get();
             if($date == '30d'){
                 $now->modify('-30 days');
                 $from = $now->format('Y-m-d');

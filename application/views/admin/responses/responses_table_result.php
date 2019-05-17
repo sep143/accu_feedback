@@ -35,8 +35,10 @@ table.dataTable tbody tr td {
                     $json1 = $question->options;
                     $json_data = json_decode($json1, true);
                     $i = 1;
+                    $q_seq = array();
                     foreach ($json_data['question'] as $Qcount=> $Qrow):
                         //if ($ques->restaurant_id == $id) {
+                        array_push($q_seq, $json_data['question'][$Qcount]['sequence_no']);
                             ?>
                           <th id="popover" data-content="<?= $json_data['question'][$Qcount]['text']['en']; ?>" title="<?php
                             foreach ($type as $tc=> $tr):
@@ -61,7 +63,11 @@ table.dataTable tbody tr td {
             foreach ($tableView as $t_view => $t_row):
                 $json_view = $t_row->answer_json;
                 $json_table = json_decode($json_view, true);
-                //print_r($json_table);
+                $r_seq = array();
+//                foreach ($json_table['response'] as $j_count=>$j_view):
+//                    array_push($r_seq, $json_table['response'][$j_count]['sequence_no']);
+//                endforeach;
+                $check_seq = array_intersect($r_seq, $q_seq);
                 ?>
                 <tr >
                     <td><?= $i; ?></td>
@@ -73,8 +79,19 @@ table.dataTable tbody tr td {
                 $q_id=0;
                 $star=0; $smiley=0; $nps=0; $mstar=0;
                 $star_total=0; $smiley_total=0; $nps_total=0; $mstar_total=0;
+//                $r_seq = array();
+//                foreach ($check_seq as $r1 => $v1) :
+//                    foreach ($json_table['response'][$r1] as $r => $v) :
+////                echo $r.' yes<br>';    
+//                        if ($v == $r_seq[$r1]) {
+//                            echo 'value-' . $json_table['response'][$r1]['type'] . '-Seq-' . $json_table['response'][$r1]['sequence_no'] . '-' . $v . ' yes<br>';
+//                        }
+//                    endforeach; //response loop end
+//                endforeach; //response loop end
+                
                 foreach ($json_table['response'] as $j_count=>$j_view):
-                    
+//                    if($q_seq[$j_count] == $json_table['response'][$j_count]['sequence_no']){
+                    if(in_array($json_table['response'][$j_count]['sequence_no'], $q_seq)){
                 ?>
                    <td>
                     <?php 
@@ -87,10 +104,10 @@ table.dataTable tbody tr td {
                     $mstar_total = 0;
                     $mstar = 0;
                     foreach ($json_table['response'][$j_count]['value'] as $count =>$answer):
-                        echo "<i style='font-size:6px;' class='fa fa-circle'></i> ".$json_table['response'][$q_id]['value'][$count]['option'].": ";
-                        echo "<i class='fa fa-star'></i> ".$json_table['response'][$q_id]['value'][$count]['value']."/5<br>";
-                        $mstar += $json_table['response'][$q_id]['value'][$count]['value'];
-                        if($json_table['response'][$q_id]['value'][$count]['value']){
+                        echo "<i style='font-size:6px;' class='fa fa-circle'></i> ".$json_table['response'][$j_count]['value'][$count]['option'].": ";
+                        echo "<i class='fa fa-star'></i> ".$json_table['response'][$j_count]['value'][$count]['value']."/5<br>";
+                        $mstar += $json_table['response'][$j_count]['value'][$count]['value'];
+                        if($json_table['response'][$j_count]['value'][$count]['value']){
                             $mstar_total += 5;
                         }
                         //echo $mstar;
@@ -101,28 +118,28 @@ table.dataTable tbody tr td {
                     echo "<i class='fa fa-smile-o'></i> ".$json_table['response'][$j_count]['value']."/5<br>";
                 }else if($check == 4){
                     foreach ($json_table['response'][$j_count]['value'] as $count =>$answer):
-                        echo "<i style='font-size:6px;' class='fa fa-circle'></i> ".$json_table['response'][$q_id]['value'][$count]['option'].": ";
-                        echo "<i class='fa fa-smile-o'></i> ".$json_table['response'][$q_id]['value'][$count]['value']."/5<br>";
+                        echo "<i style='font-size:6px;' class='fa fa-circle'></i> ".$json_table['response'][$j_count]['value'][$count]['option'].": ";
+                        echo "<i class='fa fa-smile-o'></i> ".$json_table['response'][$j_count]['value'][$count]['value']."/5<br>";
                     endforeach;
                 }
                else if($check == 5){
                 foreach ($json_table['response'][$j_count]['value'] as $count =>$answer):
-                    //echo $json_table['response'][$q_id]['value'][$count]['type']."-";
-                    echo "<i style='font-size:6px;' class='fa fa-circle'></i> ".$json_table['response'][$q_id]['value'][$count]['name'].": ";
-                    echo "<b>".$json_table['response'][$q_id]['value'][$count]['value']."</b><br>";
-               endforeach; }
-               else if($check == 6){
+                    //echo $json_table['response'][$j_count]['value'][$count]['type']."-";
+                    echo "<i style='font-size:6px;' class='fa fa-circle'></i> ".$json_table['response'][$j_count]['value'][$count]['name'].": ";
+                    echo "<b>".$json_table['response'][$j_count]['value'][$count]['value']."</b><br>";
+               endforeach; 
+               }else if($check == 6){
                    $nps_total = 10;
-                   $nps = $json_table['response'][$q_id]['value'];
-                   echo $json_table['response'][$q_id]['value'];
+                   $nps = $json_table['response'][$j_count]['value'];
+                   echo $json_table['response'][$j_count]['value'];
                }else if($check == 7){
-                   foreach ($json_table['response'][$j_count]['value'] as $count =>$answer):
+                    foreach ($json_table['response'][$j_count]['value'] as $count =>$answer):
                        if($json_table['response'][$j_count]['value'][$count]['selected'] == 'true'){
                            echo $json_table['response'][$j_count]['value'][$count]['name'];
                        }else{
                            
                        }
-               endforeach;
+                    endforeach;
                }else if($check == 8){
                     foreach ($json_table['response'][$j_count]['value'] as $count =>$answer):
                        if($json_table['response'][$j_count]['value'][$count]['selected'] == 'true'){
@@ -130,23 +147,23 @@ table.dataTable tbody tr td {
                        }else{
                            
                        }
-               endforeach;
+                    endforeach;
                }else if($check == 9){
-                   foreach ($json_table['response'][$j_count]['value'] as $count =>$answer):
+                    foreach ($json_table['response'][$j_count]['value'] as $count =>$answer):
                        if($json_table['response'][$j_count]['value'][$count]['selected'] == 'true'){
                            echo $json_table['response'][$j_count]['value'][$count]['name'];
                        }else{
                            
                        }
-               endforeach;
+                    endforeach;
                }else if($check == 10){
-                   foreach ($json_table['response'][$j_count]['value'] as $count =>$answer):
+                    foreach ($json_table['response'][$j_count]['value'] as $count =>$answer):
                        if($json_table['response'][$j_count]['value'][$count]['selected'] == 'true'){
                            echo "<i style='font-size:6px;' class='fa fa-circle'></i> ".$json_table['response'][$j_count]['value'][$count]['name']."<br>";
                        }else{
                            
                        }
-               endforeach;
+                    endforeach;
                }else if($check == 11){
                    echo $json_table['response'][$j_count]['value'];
                    
@@ -171,14 +188,20 @@ table.dataTable tbody tr td {
                 <?php
                  
                 $q_id++;
+                }
                endforeach; 
-              
+              //question wise responses view
+               
               $obtain = ((int)$star + (int)$smiley + (int)$nps + (int)$mstar);
 
                $total = $star_total + $smiley_total + $nps_total + $mstar_total; 
-
-               $score_cal = (($obtain/$total)*10)/2;
-               $score = round($score_cal, 2);
+               if($total){
+                   $score_cal = (($obtain/$total)*10)/2;
+                   $score = round($score_cal, 2);
+               }else{
+                   $score = 0.00;
+               }
+               
                ?>
                    <td>
                        <b><?= $score; ?></b>
@@ -195,7 +218,16 @@ table.dataTable tbody tr td {
         </table>
        
     </div>
-    
+   <?php
+//   $vv = "Hello dear this value only check";
+//   echo str_word_count($vv).'<br>';
+//   echo str_replace("dear", "oo", $vv).'<br>';
+//   echo strchr($vv, 'dea').'<br>';
+//   if(strpos($vv, "this") !== FALSE)
+//       echo 'true';
+//   else
+//       echo 'No way';
+   ?>
 </div>
        
 <!--DataTables--> 

@@ -18,7 +18,7 @@
                                 <table width="100%" cellpadding="0" cellspacing="0" style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing:border-box; font-size:14px; border-radius:3px; background-color:#fff; margin:0; border:1px solid #e9e9e9" bgcolor="#fff"><tbody>
                                         <tr style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing:border-box; font-size:14px; margin:0">
                                             <td style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing:border-box; font-size:20px; vertical-align:top; color:#fff; font-weight:500; text-align:center; border-radius:3px 3px 0 0; background-color:#3aaed9; margin:0; padding:20px" align="center" bgcolor="#3AAED9" valign="top">
-                                                Smart Survey  </td>
+                                                Accu Feedback  </td>
                                         </tr>
                                         <tr style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing:border-box; font-size:14px; margin:0">
                                             <td style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing:border-box; font-size:15px; vertical-align:top; text-transform:uppercase; color:#686868; font-weight:500; text-align:center; background-color:#ddf6ff; margin:0;padding:5px" align="center" bgcolor="#DDF6FF" valign="top">
@@ -44,7 +44,7 @@
                                                         </tr>
                                                         <tr style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing:border-box; font-size:14px; margin:0">
                                                             <td style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing:border-box; font-size:14px; vertical-align:top; margin:0; padding:0 0 20px" valign="top">
-                                                                &nbsp;</br></br> Thank you for choosing Elegant Surveys. 
+                                                                &nbsp;</br>
                                                             </td>
                                                         </tr>
                                                         

@@ -107,7 +107,7 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                             </div>
                             <div class="col-lg-8 col-md-7 col-sm-12 input-group">
                                 <input type="email" name="trigger_email[]" value="<?= set_value('trigger_email[]', $email_data[$e_count]); ?>" class="form-control" id="email" placeholder="Enter Email" required="">
-                                <span class="input-group-btn"><button type="button" class="btn btn-default btn-info" id="dltEmail<?= $e_count+1; ?>">X</button></span>
+                                <span class="input-group-btn"><button type="button" class="btn btn-default" id="dltEmail<?= $e_count+1; ?>">X</button></span>
                             </div>
                         </div>
                     <?php }  else { ?>
@@ -202,14 +202,30 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
      <?php
       foreach ($email_data as $e_count => $e_data): ?>
         $('#dltEmail<?= $e_count+1; ?>').on('click', function() {
-           // alert('check');
-          $('#del_email_row<?= $e_count+1; ?>').closest('div').remove();
+            //alert('check');
+            $.confirm({
+                //animation: 'zoom',
+                icon:'fa fa-warning',
+                title: 'Delete Alert Mail',
+                content: 'Any mail to information never sent.',
+                theme: 'modern',
+                buttons: {
+                    confirm: function () {
+                        //$.alert('Confirmed!');
+                       $('#del_email_row<?= $e_count+1; ?>').closest('div').remove();
+                    },
+                    cancel: function () {
+                        //$.alert('Canceled!');
+                    },
+                    
+                }
+            });
+          
         });    
     <?php  endforeach; ?>
 </script>
 
 <script>
-      
     $('#addDiv1').click(function(){
         $('#emailAdd').append('<div class="row" id="emailDel"><div class="col-lg-4 col-sm-12">\n\
                                 <div class="form-group">\n\
@@ -219,7 +235,7 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                 </div>\n\
                             </div>\n\
                             <div class="col-lg-8 col-sm-12 input-group">\n\
-                                <input type="email" name="trigger_email[]" class="form-control" id="firstname" placeholder="Enter Email" required=""><span class="input-group-btn"><button class="btn btn-default btn-info" id="dltEmail">X</button></span>\n\
+                                <input type="email" name="trigger_email[]" class="form-control" id="firstname" placeholder="Enter Email" required=""><span class="input-group-btn"><button class="btn btn-default" id="dltEmail">X</button></span>\n\
                             </div></div>');
     });
     $('#emailAdd').on('click', '#dltEmail', function() {
@@ -287,6 +303,8 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                 data:{'<?php echo $this->security->get_csrf_token_name(); ?>':'<?php echo $this->security->get_csrf_hash(); ?>', type2:type, count2:count, survey_id:survey_id, select_condition:select_condition, condition_value:condition_value, condition_value2:condition_value2 },
                 success: function(data){
                     $('#question').append(data);
+                    $('#select_question').val('');
+                    $('#sel_type').empty();
                      $('#question').on('click', '#dltQuestion', function() {
                             $(this).closest('tr').remove();
                         });

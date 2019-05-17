@@ -195,7 +195,7 @@ class Example extends REST_Controller {
         $data['survey_id'] = $survey->survey_id;
         $data['restaurant_id'] = $survey->restaurant_id;
         $data['survey_name'] = $survey->survey_name;
-        $data['status'] = $survey->status;
+        $data['status'] = ($survey->status == 1)?true:false;
         $data['survey_create_date'] = $survey->survey_create_date;
         $data['survey_update_date'] = $survey->survey_update_date;
         $data['survey_device'] = $survey->survey_device;
@@ -205,25 +205,26 @@ class Example extends REST_Controller {
         if($dat['branding_id']){
             $branding = $this->API_model->brandingGet($dat['branding_id']);
             $data['branding_id'] = $branding->b_id;
-            $data['branding_name'] = $branding->b_brand_name;
+            $data['branding_name'] = ($branding->b_brand_name != '')?$branding->b_brand_name:'Accu Feedback';
+//            $data['branding_logo'] = ($branding->b_home_logo != '')?base_url().'uploads/'.$dat['restaurant_id'].'/'.$branding->b_home_logo: base_url().'image/app_logo.png';
             if($branding->b_home_logo){
                 $data['branding_logo'] = base_url().'uploads/'.$dat['restaurant_id'].'/'.$branding->b_home_logo;
             }else{
-                $data['branding_logo'] = '';
+                $data['branding_logo'] = base_url().'uploads/byDefault/app_logo.png';
             }
-            $data['branding_title'] = $branding->b_home_title;
-            $data['branding_title_color'] = $branding->b_home_t_color;
-            $data['branding_button_text'] = $branding->b_home_button_text;
+            $data['branding_title'] = ($branding->b_home_title != '')?$branding->b_home_title:'Accu Feedback';
+            $data['branding_title_color'] = ($branding->b_home_t_color != '')?$branding->b_home_t_color:'green';
+            $data['branding_button_text'] = ($branding->b_home_button_text != '')?$branding->b_home_button_text:'Take Survey';
             if($branding->b_home_background){
                 $data['branding_background'] = base_url().'uploads/'.$dat['restaurant_id'].'/'.$branding->b_home_background;
             }else{
-                $data['branding_background'] = '';
+                $data['branding_background'] = base_url().'uploads/byDefault/bg.png';
             }
-            $data['branding_survey_color'] = $branding->b_home_survey_color;
+            $data['branding_survey_color'] = ($branding->b_home_survey_color != '')?$branding->b_home_survey_color:'green';
             if($branding->b_home_thanks){
                 $data['branding_thanks_image'] = base_url().'uploads/'.$dat['restaurant_id'].'/'.$branding->b_home_thanks;
             }else{
-                $data['branding_thanks_image'] = '';
+                $data['branding_thanks_image'] = base_url().'uploads/byDefault/thanks.jpg';
             }
         }
         //get waiter = staff data find and view api
@@ -253,7 +254,11 @@ class Example extends REST_Controller {
     }else{
         $this->response([
             'status'=> FALSE,
-            'message'=> 'This Device Not Active. Please Active Device In Admin Panel.'
+            'message'=> 'There is no survey activated on this device . please activated from admin panel.',
+            'branding_logo'=> base_url().'uploads/byDefault/app_logo.png',
+            'branding_title'=>'Accu Feedback',
+            'branding_title_color'=>'green',
+            'branding_background'=> base_url().'uploads/byDefault/bg.png',
         ],  REST_Controller::HTTP_OK);
     }
  }
@@ -284,6 +289,7 @@ class Example extends REST_Controller {
             $restaurant_id = $this->post('restaurant_id');
             $survey_id = $this->post('survey_id');
             $check_trigger = $this->API_model->trigger_check($restaurant_id, $survey_id);
+
             $tri_data = array();
         if($check_trigger){
             foreach ($check_trigger as $trigger_count =>$trigger_data){
@@ -295,7 +301,7 @@ class Example extends REST_Controller {
              
              foreach ($data['trigger_condition']['condition'] as $tri_count=>$tri_n):
                  
-                $trigger_condition = $data['trigger_condition']['condition'][$tri_count];
+                 $trigger_condition = $data['trigger_condition']['condition'][$tri_count];
                 foreach ($responses['answer_json']['response'] as $res_count=>$res_data):
                  $responses_check = $responses['answer_json']['response'][$res_count];
 
@@ -402,6 +408,7 @@ class Example extends REST_Controller {
                         //$this->email->bcc("example2@domain.com"); 
                        
                         $this->email->message($message);   
+                          
                         
                         $this->email->send();
                         echo $this->email->print_debugger();
@@ -487,7 +494,7 @@ class Example extends REST_Controller {
                     //'trigger'=> $tri_data,
                     //'responses'=> $responses['answer_json']
                     //'data' => $data['condition']
-                ], REST_Controller::HTTP_OK);
+                        ], REST_Controller::HTTP_OK);
             } else {
                 $this->response([
                 'status' => FALSE,

@@ -69,7 +69,6 @@
             var survey_id = $('#survey_id').val();
             var select_condition = $('#select_condition').val();
             var condition_value = $('#condition_value').val();
-            
             var condition_value2 = $('#condition_value2').val();
             //alert(condition_value2);
 
@@ -94,6 +93,8 @@
                 data:{'<?php echo $this->security->get_csrf_token_name(); ?>':'<?php echo $this->security->get_csrf_hash(); ?>', type2:type, count2:count, survey_id:survey_id, select_condition:select_condition, condition_value:condition_value, condition_value2:condition_value2 },
                 success: function(data){
                     $('#question').append(data);
+                    $('#select_question').val('');
+                    $('#sel_type').empty();
                      $('#question').on('click', '#dltQuestion', function() {
                             $(this).closest('tr').remove();
                         });

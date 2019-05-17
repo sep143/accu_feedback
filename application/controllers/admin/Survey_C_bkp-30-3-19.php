@@ -240,25 +240,25 @@ class Survey_C extends MY_Controller {
                 $type2 = $this->input->post('restaurant_id');
                 $question_id = $this->input->post('question_id');
                 $question = $this->input->post('question');
-//                print_r($question);
+                print_r($question);
                 $question_count = sizeof($question);
-//                print_r($question_count); //exit();
+                print_r($question_count); //exit();
                 $sequence_no = $this->input->post('sequence_no'); 
-//                print_r($sequence_no);
+                print_r($sequence_no);
                 $type = $this->input->post('survey_type');
-                $sequence_delete = $this->input->post('sequence_delete');
-//                print_r($sequence_delete);
+                echo 'type';
+                print_r($type);
+                echo 'type<br>';
                 $mandatory = $this->input->post('mandatory'); //($this->input->post('mandatory') != FALSE) ? $this->input->post('mandatory') : NULL;
     //Multitype option select only lable name use
                 $option = $this->input->post('optionName');
-//                echo '<br>';
-//                print_r($option); echo '<br>';
+                echo '<br>';
+                print_r($option); echo '<br>';
                 $optionName_id = $this->input->post('optionName_id');
-//                print_r($optionName_id);
+                print_r($optionName_id);
                 $option_count = sizeof($option);
                 //Multidata filed use as a mini form name,email,number etc. 
                 $optionField = $this->input->post('optionData');
-//                print_r($optionField); //exit();
                 $optionData_id = $this->input->post('optionData_id');
                 $optionName = $this->input->post('dataField');
                 $optionMand = $this->input->post('dataFieldmen');
@@ -277,8 +277,8 @@ class Survey_C extends MY_Controller {
 //                    $options[0] = NULL;
 //                    $options[1] = NULL;
                     
-//                if(in_array($sequence_no[$key2], $optionName_id)){
-//                    print_r($key2);
+                if(in_array($sequence_no[$key2], $optionName_id)){
+                    print_r($key2);
                     if ($type[$key2] == 2 || $type[$key2] == 4 || $type[$key2] == 7 || $type[$key2] == 8 || $type[$key2] == 9 || $type[$key2] == 10) {
 //                       if(in_array($sequence_no[$key2], $optionName_id)){
                         $options_value = array();
@@ -318,7 +318,7 @@ class Survey_C extends MY_Controller {
                             }$options[] = $matrix_c_value;
 //                        }
                     }
-//                }
+                }
                     
                         //This is main array using json format convert data and insert database
                         $question_value['question_lang'] = array(
@@ -394,18 +394,9 @@ class Survey_C extends MY_Controller {
                         }
                    
                 $i++;
-                }
-                echo '<br>';
-                $ss = null;
-                foreach ($sequence_delete as $del_c=>$del){
-                    unset($question_value['question'][$del]);
-                }
-                //$question_value = array_values($question_value['question']);
-                $question_value1 = json_encode($question_value, true);
-                $qqq = json_decode($question_value1, true);
-//                unset($qqq['question'][2]);
-//                $question_value1 = json_encode($qqq);
-//                print_r($question_value1); exit();
+                } 
+                $question_value1 = json_encode($question_value);
+                print_r($question_value1); exit();
                 $survey = array(
                     'restaurant_id' => $this->input->post('restaurant_id'),
                     'survey_name' => $this->input->post('surveyname'),
@@ -413,7 +404,6 @@ class Survey_C extends MY_Controller {
                     'survey_update_date' => date('Y-m-d H:i:s'),
                     'options' => $question_value1
                 );
-                //print_r($send_survey_id); exit();
                 $survey_id = $this->Survey_model->update_survey($survey, $send_survey_id);
                  if(!empty($survey_id)){
                      $data['view'] = 'admin/devices/device_list_view';

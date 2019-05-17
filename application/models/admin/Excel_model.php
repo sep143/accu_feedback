@@ -44,5 +44,11 @@ $this->db = $this->load->database('default', TRUE,TRUE);
         return $data->result();
         //print_r($data->result()); exit();
     }
+    
+    //response >> query set to controller
+    function responseGetSql($sql) {
+        $data = $this->db->query($sql);
+        return $data->result();
+    }
  
 }

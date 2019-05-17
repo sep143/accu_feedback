@@ -106,11 +106,15 @@ if($tableView) {
 <!--Star Off-->
  
 <?php 
+    $q_seq = array();
+    foreach ($json_question['question'] as $Qcount => $Qrow):
+        array_push($q_seq, $json_question['question'][$Qcount]['sequence_no']);
+    endforeach;
     
     foreach ($json_question['question'] as $Qcount => $Qrow):
         $ch_type = $json_question['question'][$Qcount]['type'];
     
-    if($json_question['question'][$Qcount]['sequence_no'] == ($Qcount+1)){
+//    if($json_question['question'][$Qcount]['sequence_no'] == ($Qcount+1)){
         
 
         
@@ -131,21 +135,22 @@ if($tableView) {
       $star1=0; 
          $star2=0; $star3=0; $star4=0; $star5=0;
      foreach ($star_json['response'] as $star_answer =>$an):
-         if($star_json['response'][$star_answer]['type'] == 1 && $json_question['question'][$Qcount]['sequence_no'] == $star_answer+1){
-             
-             if($star_json['response'][$star_answer]['value'] == 1){
-                 $star1 += 1;
-             }else if($star_json['response'][$star_answer]['value'] == 2){
-                 $star2 += 1;
-             }else if($star_json['response'][$star_answer]['value'] == 3){
-                 $star3 += 1;
-             }else if($star_json['response'][$star_answer]['value'] == 4){
-                  $star4 += 1;
-             }else if($star_json['response'][$star_answer]['value'] == 5){
-                 $star5 += 1;
-             }
+         if(in_array($star_json['response'][$star_answer]['sequence_no'], $q_seq)){
+            if($star_json['response'][$star_answer]['type'] == 1 && $json_question['question'][$Qcount]['sequence_no'] == $star_answer+1){
+
+                if($star_json['response'][$star_answer]['value'] == 1){
+                    $star1 += 1;
+                }else if($star_json['response'][$star_answer]['value'] == 2){
+                    $star2 += 1;
+                }else if($star_json['response'][$star_answer]['value'] == 3){
+                    $star3 += 1;
+                }else if($star_json['response'][$star_answer]['value'] == 4){
+                     $star4 += 1;
+                }else if($star_json['response'][$star_answer]['value'] == 5){
+                    $star5 += 1;
+                }
+            }
          }
-          
      endforeach;
       $st1 += $star1;
       $st2 += $star2;
@@ -156,14 +161,23 @@ if($tableView) {
       $st_total += $star1 + $star2 + $star3 + $star4 + $star5; 
              
      endforeach; 
-     $st1_avg = (((int)$st1/$st_total)*100);
-     $st2_avg = (((int)$st2/$st_total)*100);
-     $st3_avg = (((int)$st3/$st_total)*100);
-     $st4_avg = (((int)$st4/$st_total)*100);
-     $st5_avg = (((int)$st5/$st_total)*100);
-     
-     $star_rating = (($st1*1)+($st2*2)+($st3*3)+($st4*4)+($st5*5));
+     $rating = 0; 
+     $st1_avg = 0;
+     $st2_avg = 0;
+     $st3_avg = 0;
+     $st4_avg = 0;
+     $st5_avg = 0;
+     if($st_total){
+        $st1_avg = (((int)$st1/$st_total)*100);
+        $st2_avg = (((int)$st2/$st_total)*100);
+        $st3_avg = (((int)$st3/$st_total)*100);
+        $st4_avg = (((int)$st4/$st_total)*100);
+        $st5_avg = (((int)$st5/$st_total)*100);
+        
+        $star_rating = (($st1*1)+($st2*2)+($st3*3)+($st4*4)+($st5*5));
      $rating = round(($star_rating/($st_total*5)*5), 2);
+     }
+     
       ?>      
             <div data-v-0775d61a="" class="text-center">Average Rating of 
                 <strong data-v-0775d61a=""><?= $rating; ?></strong> from <strong data-v-0775d61a="">
@@ -336,23 +350,24 @@ if($tableView) {
      $json_star = $n->answer_json;
      $star_json = json_decode($json_star, true);
      foreach ($star_json['response'] as $star_answer =>$an):
-         if($star_json['response'][$star_answer]['type'] == 2 && $json_question['question'][$Qcount]['sequence_no'] == $star_answer+1){
-             $count_total = 0;
-             $multiStar[] = array();
-             foreach ($star_json['response'][$star_answer]['value'] as $count =>$value):
-                 $check = $star_json['response'][$star_answer]['value'];
-             if($d == 0)
-                $multi_s_name[$count] = $check[$count]['option'];
-             if($d == 0){
-                 $multi_star[$count] = 0;
-             }
-             if($check[$count]['value']){
-                 $multiStar[$d][$count] = $check[$count]['value'];
-              }
-             endforeach;
-            
-         }
-          
+         if(in_array($star_json['response'][$star_answer]['sequence_no'], $q_seq)){
+            if($star_json['response'][$star_answer]['type'] == 2 && $json_question['question'][$Qcount]['sequence_no'] == $star_answer+1){
+                $count_total = 0;
+                $multiStar[] = array();
+                foreach ($star_json['response'][$star_answer]['value'] as $count =>$value):
+                    $check = $star_json['response'][$star_answer]['value'];
+                if($d == 0)
+                   $multi_s_name[$count] = $check[$count]['option'];
+                if($d == 0){
+                    $multi_star[$count] = 0;
+                }
+                if($check[$count]['value']){
+                    $multiStar[$d][$count] = $check[$count]['value'];
+                 }
+                endforeach;
+
+            }
+    }    
      endforeach;
      
      endforeach; 
@@ -419,23 +434,24 @@ if($tableView) {
      $json_star = $n->answer_json;
      $star_json = json_decode($json_star, true);
      foreach ($star_json['response'] as $star_answer =>$an):
-         if($star_json['response'][$star_answer]['type'] == 2 && $json_question['question'][$Qcount]['sequence_no'] == $star_answer+1){
-             $count_total = 0;
-             $multiStar[$d]=array();
-             foreach ($star_json['response'][$star_answer]['value'] as $count =>$value):
-                 $check = $star_json['response'][$star_answer]['value'];
-             if($d == 0)
-                $multi_s_name[$count] = $check[$count]['option'];
-             if($d == 0){
-                 $multi_star[$count] = 0;
-             }
-             if($check[$count]['value']){
-                 $multiStar[$d][$count] = $check[$count]['value'];
-              }
-             endforeach;
-             
-         }
-          
+         if(in_array($star_json['response'][$star_answer]['sequence_no'], $q_seq)){
+            if($star_json['response'][$star_answer]['type'] == 2 && $json_question['question'][$Qcount]['sequence_no'] == $star_answer+1){
+                $count_total = 0;
+                $multiStar[$d]=array();
+                foreach ($star_json['response'][$star_answer]['value'] as $count =>$value):
+                    $check = $star_json['response'][$star_answer]['value'];
+                if($d == 0)
+                   $multi_s_name[$count] = $check[$count]['option'];
+                if($d == 0){
+                    $multi_star[$count] = 0;
+                }
+                if($check[$count]['value']){
+                    $multiStar[$d][$count] = $check[$count]['value'];
+                 }
+                endforeach;
+
+            }
+         }   
      endforeach;
      
      endforeach; 
@@ -489,6 +505,7 @@ if($tableView) {
      $star_json = json_decode($json_star, true);
       $smiley1=0; $smiley2=0; $smiley3=0; $smiley4=0; $smiley5=0;
      foreach ($star_json['response'] as $star_answer =>$an):
+         if(in_array($star_json['response'][$star_answer]['sequence_no'], $q_seq)){
          if($star_json['response'][$star_answer]['type'] == 3 && $json_question['question'][$Qcount]['sequence_no'] == $star_answer+1){
              
              if($star_json['response'][$star_answer]['value'] == 1){
@@ -503,7 +520,7 @@ if($tableView) {
                  $smiley5 += 1;
              }
          }
-          
+         }    
      endforeach;
       $sm1 += $smiley1;
       $sm2 += $smiley2;
@@ -515,12 +532,19 @@ if($tableView) {
      endforeach; 
 
      $sm_total = $sm1 + $sm2 + $sm3 + $sm4 + $sm5;
+     $very_happy = 0;
+     $happy = 0;
+     $neutral = 0;
+     $sad = 0;
+     $very_sad = 0;
+     if($sm_total){
+        $very_happy = (((int)$sm5/(int)$sm_total)*100);
+        $happy = (((int)$sm4/(int)$sm_total)*100);
+        $neutral = (((int)$sm3/(int)$sm_total)*100);
+        $sad = (((int)$sm2/(int)$sm_total)*100);
+        $very_sad = (((int)$sm1/(int)$sm_total)*100);
+     }
      
-     $very_happy = (((int)$sm5/(int)$sm_total)*100);
-     $happy = (((int)$sm4/(int)$sm_total)*100);
-     $neutral = (((int)$sm3/(int)$sm_total)*100);
-     $sad = (((int)$sm2/(int)$sm_total)*100);
-     $very_sad = (((int)$sm1/(int)$sm_total)*100);
       ?> 
 
 <script>
@@ -679,6 +703,7 @@ if($tableView) {
      $json_star = $n->answer_json;
      $star_json = json_decode($json_star, true);
      foreach ($star_json['response'] as $star_answer =>$an):
+         if(in_array($star_json['response'][$star_answer]['sequence_no'], $q_seq)){
          if($star_json['response'][$star_answer]['type'] == 4 && $json_question['question'][$Qcount]['sequence_no'] == $star_answer+1){
              $count_total = 0;
              $multiStar[] = array();
@@ -695,7 +720,7 @@ if($tableView) {
              endforeach;
             
          }
-          
+         }  
      endforeach;
      
      endforeach; 
@@ -749,6 +774,7 @@ if($tableView) {
      $json_star = $n->answer_json;
      $star_json = json_decode($json_star, true);
      foreach ($star_json['response'] as $star_answer =>$an):
+         if(in_array($star_json['response'][$star_answer]['sequence_no'], $q_seq)){
          if($star_json['response'][$star_answer]['type'] == 4 && $json_question['question'][$Qcount]['sequence_no'] == $star_answer+1){
              $count_total = 0;
              $multiStar[$d]=array();
@@ -765,7 +791,7 @@ if($tableView) {
              endforeach;
              
          }
-          
+         }  
      endforeach;
      
      endforeach; 
@@ -806,6 +832,7 @@ if($tableView) {
      $star_json = json_decode($json_star, true);
       $promo1=0; $passi1=0; $detrac1=0;
      foreach ($star_json['response'] as $star_answer =>$an):
+         if(in_array($star_json['response'][$star_answer]['sequence_no'], $q_seq)){
          if($star_json['response'][$star_answer]['type'] == 6 && $json_question['question'][$Qcount]['sequence_no'] == $star_answer+1){
              
              if($star_json['response'][$star_answer]['value'] <= 6){
@@ -816,7 +843,7 @@ if($tableView) {
                  $promo1 += 1;
              }
          }
-          
+         }  
      endforeach;
      $promoters += $promo1;
       $passives += $passi1;
@@ -942,6 +969,7 @@ if($tableView) {
      $json_star = $n->answer_json;
      $star_json = json_decode($json_star, true);
      foreach ($star_json['response'] as $star_answer =>$an):
+         if(in_array($star_json['response'][$star_answer]['sequence_no'], $q_seq)){
          if($star_json['response'][$star_answer]['type'] == 7 && $json_question['question'][$Qcount]['sequence_no'] == $star_answer+1){
              $count_total = 0;
              foreach ($star_json['response'][$star_answer]['value'] as $count =>$value):
@@ -957,7 +985,7 @@ if($tableView) {
               }
              endforeach;
          }
-          
+         }  
      endforeach;
      endforeach; 
      foreach ($multi_choice as $count=> $nn):
@@ -1035,6 +1063,7 @@ if($tableView) {
      $json_star = $n->answer_json;
      $star_json = json_decode($json_star, true);
      foreach ($star_json['response'] as $star_answer =>$an):
+         if(in_array($star_json['response'][$star_answer]['sequence_no'], $q_seq)){
          if($star_json['response'][$star_answer]['type'] == 8 && $json_question['question'][$Qcount]['sequence_no'] == $star_answer+1){
              $count_total = 0;
              foreach ($star_json['response'][$star_answer]['value'] as $count =>$value):
@@ -1050,7 +1079,7 @@ if($tableView) {
               }
              endforeach;
          }
-          
+         }
      endforeach;
      endforeach; 
      foreach ($multi_choice as $count=> $nn):
@@ -1135,6 +1164,7 @@ if($tableView) {
      $json_star = $n->answer_json;
      $star_json = json_decode($json_star, true);
      foreach ($star_json['response'] as $star_answer =>$an):
+         if(in_array($star_json['response'][$star_answer]['sequence_no'], $q_seq)){
          if($star_json['response'][$star_answer]['type'] == 9 && $json_question['question'][$Qcount]['sequence_no'] == $star_answer+1){
              $count_total = 0;
              foreach ($star_json['response'][$star_answer]['value'] as $count =>$value):
@@ -1150,7 +1180,7 @@ if($tableView) {
               }
              endforeach;
          }
-          
+         }    
      endforeach;
      endforeach; 
      foreach ($multi_choice as $count=> $nn):
@@ -1228,6 +1258,7 @@ if($tableView) {
      $json_star = $n->answer_json;
      $star_json = json_decode($json_star, true);
      foreach ($star_json['response'] as $star_answer =>$an):
+         if(in_array($star_json['response'][$star_answer]['sequence_no'], $q_seq)){
          if($star_json['response'][$star_answer]['type'] == 10 && $json_question['question'][$Qcount]['sequence_no'] == $star_answer+1){
              $count_total = 0;
              foreach ($star_json['response'][$star_answer]['value'] as $count =>$value):
@@ -1243,7 +1274,7 @@ if($tableView) {
               }
              endforeach;
          }
-
+         }
      endforeach;
      endforeach; 
      foreach ($multi_choice as $count=> $nn):
@@ -1279,6 +1310,7 @@ if($tableView) {
      $star_json = json_decode($json_star, true);
       $yes=0; $no=0; 
      foreach ($star_json['response'] as $star_answer =>$an):
+         if(in_array($star_json['response'][$star_answer]['sequence_no'], $q_seq)){
          if($star_json['response'][$star_answer]['type'] == 11 && $json_question['question'][$Qcount]['sequence_no'] == $star_answer+1){
              
              if($star_json['response'][$star_answer]['value'] == 'yes'){
@@ -1287,6 +1319,7 @@ if($tableView) {
                  $no += 1;
              }
          }
+         }
      endforeach;
       $polar_yes += $yes;
       $polay_no += $no;
@@ -1294,8 +1327,13 @@ if($tableView) {
       $polar_total += $yes + $no ; 
              
      endforeach; 
-     $yes_avg = ($polar_yes/$polar_total)/100;
-     $no_avg = ($polay_no/$polar_total)/100;
+     $yes_avg = 0;
+     $no_avg = 0;
+     if($polar_total){
+         $yes_avg = ($polar_yes/$polar_total)/100;
+         $no_avg = ($polay_no/$polar_total)/100;
+     }
+     
       ?> 
 <script>
    $(function() {
@@ -1432,6 +1470,7 @@ if($tableView) {
      $star_json = json_decode($json_star, true);
      $multi_choice[$d] = array();
      foreach ($star_json['response'] as $star_answer =>$an):
+         if(in_array($star_json['response'][$star_answer]['sequence_no'], $q_seq)){
          if($star_json['response'][$star_answer]['type'] == 12 && $json_question['question'][$Qcount]['sequence_no'] == $star_answer+1){
              $count_total = 0;
              foreach ($star_json['response'][$star_answer]['value'] as $count =>$value):
@@ -1451,7 +1490,7 @@ if($tableView) {
              
              endforeach;
          }
-
+         }
      endforeach;
      endforeach;
      
@@ -1490,7 +1529,7 @@ if($tableView) {
 </script>
 
 <?php }else{}
-    } //survey form ki jo json h usme se sequence wise loop chalne k bad if ke ander if condtion check hoga pr master if ka end point
+//    } //survey form ki jo json h usme se sequence wise loop chalne k bad if ke ander if condtion check hoga pr master if ka end point
     endforeach;
       ?>
 

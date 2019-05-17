@@ -240,26 +240,12 @@ class Survey_C extends MY_Controller {
                 $type2 = $this->input->post('restaurant_id');
                 $question_id = $this->input->post('question_id');
                 $question = $this->input->post('question');
-//                print_r($question);
-                $question_count = sizeof($question);
-//                print_r($question_count); //exit();
-                $sequence_no = $this->input->post('sequence_no'); 
-//                print_r($sequence_no);
                 $type = $this->input->post('survey_type');
-                $sequence_delete = $this->input->post('sequence_delete');
-//                print_r($sequence_delete);
                 $mandatory = $this->input->post('mandatory'); //($this->input->post('mandatory') != FALSE) ? $this->input->post('mandatory') : NULL;
     //Multitype option select only lable name use
                 $option = $this->input->post('optionName');
-//                echo '<br>';
-//                print_r($option); echo '<br>';
-                $optionName_id = $this->input->post('optionName_id');
-//                print_r($optionName_id);
-                $option_count = sizeof($option);
                 //Multidata filed use as a mini form name,email,number etc. 
                 $optionField = $this->input->post('optionData');
-//                print_r($optionField); //exit();
-                $optionData_id = $this->input->post('optionData_id');
                 $optionName = $this->input->post('dataField');
                 $optionMand = $this->input->post('dataFieldmen');
                 //grid type in option name rows and buttons columns defined
@@ -268,28 +254,19 @@ class Survey_C extends MY_Controller {
                 //this range use text, comment and number box type select
                 $numMin = $this->input->post('numMin');
                 $numMax = $this->input->post('numMax');
-                
                 $i = 1;
-//                for($key2=0;$key2 < $question_count; $key2++) {
-                foreach ($question as $key2=>$k){
-//                    echo "Q :".$key2."<br>";
+                foreach ($question as $key2 => $k1) {
+                    //echo "Q :".$key2."<br>";
                     $options=array();
-//                    $options[0] = NULL;
-//                    $options[1] = NULL;
-                    
-//                if(in_array($sequence_no[$key2], $optionName_id)){
-//                    print_r($key2);
+                    //print_r($key2);
                     if ($type[$key2] == 2 || $type[$key2] == 4 || $type[$key2] == 7 || $type[$key2] == 8 || $type[$key2] == 9 || $type[$key2] == 10) {
-//                       if(in_array($sequence_no[$key2], $optionName_id)){
                         $options_value = array();
-                        foreach($option[$key2] as $optionsAdd => $op) {
+                        foreach ($option[$key2] as $optionsAdd => $op) {
                             $option_d = $option[$key2][$optionsAdd];
                             //store in array
                             $options_value[] = $option_d;
                         }$options = $options_value;
-//                       }
-                    }else if ($type[$key2] == 5) {
-//                        if(in_array($sequence_no[$key2], $optionData_id)){
+                    } else if ($type[$key2] == 5) {
                         $data_field = array();
                         foreach ($optionField[$key2] as $dataF => $k2) {
                             $data = array(
@@ -299,49 +276,43 @@ class Survey_C extends MY_Controller {
                             );
                             $data_field[] = $data;
                         }$options = $data_field;
-//                        }
-                    } 
-                    else if ($type[$key2] == 12) {
-//                        if(in_array($sequence_no[$key2], $optionName_id)){
-                            //matrix row
-                            $matrix_value = array();
-                            foreach ($mtrixOption[$key2] as $Mrow => $mr) {
-                                $mtrix_row = $mtrixOption[$key2][$Mrow];
-                                $matrix_value[] = $mtrix_row;
-                            }$options[] = $matrix_value;
+                    } else if ($type[$key2] == 12) {
+                        //matrix row
+                        $matrix_value = array();
+                        foreach ($mtrixOption[$key2] as $Mrow => $mr) {
+                            $mtrix_row = $mtrixOption[$key2][$Mrow];
+                            $matrix_value[] = $mtrix_row;
+                        }$options[] = $matrix_value;
 
-                            //matrix Columns
-                            $matrix_c_value = array();
-                            foreach ($matrixAnswer[$key2] as $Mrow => $mr) {
-                                $mtrix_column = $matrixAnswer[$key2][$Mrow];
-                                $matrix_c_value[] = $mtrix_column;
-                            }$options[] = $matrix_c_value;
-//                        }
+                        //matrix Columns
+                        $matrix_c_value = array();
+                        foreach ($matrixAnswer[$key2] as $Mrow => $mr) {
+                            $mtrix_column = $matrixAnswer[$key2][$Mrow];
+                            $matrix_c_value[] = $mtrix_column;
+                        }$options[] = $matrix_c_value;
+                    } else if ($type[$key2] == 13 || $type[$key2] == 14 || $type[$key2] == 15) {
+                        
+                    } else {
+                        //echo 'No Type any :';
                     }
-//                }
-                    
                         //This is main array using json format convert data and insert database
                         $question_value['question_lang'] = array(
-                        'lang' => array(
-                            'en' => 'English',
-                            ),
-                        );
+                            'lang' => array(
+                                'en' => 'English',
+                                ),
+                            );
                         if ($type[$key2] == 1 || $type[$key2] == 3 || $type[$key2] == 6 || $type[$key2] == 11) {
-//                            if(in_array($question, $key2)){
-                                $question_value['question'][] = array(
-                                    'sequence_no' => $sequence_no[$key2],
-//                                    'sequence_no' => array_search($question[$key2], $question),
-                                    'type' => $type[$key2],
-                                    'required' => $mandatory[$key2],
-                                    'text' => array(
-                                        'en' => $question[$key2],
-                                    ),
-                                );
-//                            }
-                            
+                            $question_value['question'][] = array(
+                                'sequence_no' => $i,
+                                'type' => $type[$key2],
+                                'required' => $mandatory[$key2],
+                                'text' => array(
+                                    'en' => $question[$key2],
+                                ),
+                            );
                         } elseif ($type[$key2] == 2 || $type[$key2] == 4 || $type[$key2] == 7 || $type[$key2] == 8 || $type[$key2] == 9 || $type[$key2] == 10) {
                             $question_value['question'][] = array(
-                                'sequence_no' => $sequence_no[$key2],
+                                'sequence_no' => $i,
                                 'type' => $type[$key2],
                                 'required' => $mandatory[$key2],
                                 'text' => array(
@@ -353,7 +324,7 @@ class Survey_C extends MY_Controller {
                             );
                         } elseif ($type[$key2] == 5) {
                             $question_value['question'][] = array(
-                                'sequence_no' => $sequence_no[$key2],
+                                'sequence_no' => $i,
                                 'type' => $type[$key2],
                                 'required' => $mandatory[$key2],
                                 'text' => array(
@@ -365,7 +336,7 @@ class Survey_C extends MY_Controller {
                             );
                         } elseif ($type[$key2] == 12) {
                             $question_value['question'][] = array(
-                                'sequence_no' => $sequence_no[$key2],
+                                'sequence_no' => $i,
                                 'type' => $type[$key2],
                                 'required' => $mandatory[$key2],
                                 'text' => array(
@@ -380,32 +351,23 @@ class Survey_C extends MY_Controller {
                             );
                         } elseif ($type[$key2] == 13 || $type[$key2] == 14 || $type[$key2] == 15) {
                             $question_value['question'][] = array(
-                                'sequence_no' => $sequence_no[$key2],
+                                'sequence_no' => $i,
                                 'type' => $type[$key2],
                                 'required' => $mandatory[$key2],
                                 'text' => array(
                                     'en' => $question[$key2],
                                 ),
-                                'min_range' => $numMin,
-                                'max_range' => $numMax
+                                'min_range' => $numMin[$key2],
+                                'max_range' => $numMax[$key2]
                             );
                         } else {
                             echo 'Error';
                         }
                    
                 $i++;
-                }
-                echo '<br>';
-                $ss = null;
-                foreach ($sequence_delete as $del_c=>$del){
-                    unset($question_value['question'][$del]);
-                }
-                //$question_value = array_values($question_value['question']);
-                $question_value1 = json_encode($question_value, true);
-                $qqq = json_decode($question_value1, true);
-//                unset($qqq['question'][2]);
-//                $question_value1 = json_encode($qqq);
-//                print_r($question_value1); exit();
+                } 
+                $question_value1 = json_encode($question_value);
+                //print_r($question_value1); exit();
                 $survey = array(
                     'restaurant_id' => $this->input->post('restaurant_id'),
                     'survey_name' => $this->input->post('surveyname'),
@@ -413,7 +375,6 @@ class Survey_C extends MY_Controller {
                     'survey_update_date' => date('Y-m-d H:i:s'),
                     'options' => $question_value1
                 );
-                //print_r($send_survey_id); exit();
                 $survey_id = $this->Survey_model->update_survey($survey, $send_survey_id);
                  if(!empty($survey_id)){
                      $data['view'] = 'admin/devices/device_list_view';

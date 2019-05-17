@@ -533,7 +533,7 @@ $(document).ready(function(){
 <script>
  $(document).ready(function(){ 
       $('#datepicker').on('click', function(){
-        $("#datePicker_range option[value='<?= $d_rang_date; ?>']").removeAttr('selected');
+        $("#datePicker_range option[value='<?php if(!empty($d_rang_date)){ echo $d_rang_date; } ?>']").removeAttr('selected');
         $("#datePicker_range option[value='custome']").attr('selected', 'selected');
     //if select date then set session of cutome
         $.ajax({
@@ -546,7 +546,7 @@ $(document).ready(function(){
     });
     
     $('#endDatePicker').on('click', function(){
-        $("#datePicker_range option[value='<?= $d_rang_date; ?>']").removeAttr('selected');
+        $("#datePicker_range option[value='<?php if(!empty($d_rang_date)){ echo $d_rang_date; } ?>']").removeAttr('selected');
         $("#datePicker_range option[value='custome']").attr('selected', 'selected');
     //if select date then set session of cutome
         $.ajax({

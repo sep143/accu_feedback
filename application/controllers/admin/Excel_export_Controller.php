@@ -66,11 +66,21 @@ class Excel_export_Controller extends MY_Controller{
         $survey_id = $this->input->post('survey_id');
         $startDate = date('Y-m-d', strtotime($this->input->post('startDate')));
         $endDate = date('Y-m-d', strtotime($this->input->post('endDate')));
-        
+
+        $waiter_id = $this->input->post('waiter_id1');
+        $device_id = $this->input->post('device_id1');
         $fileName = 'data-' . time() . '.xlsx';
         // load excel library
         $this->load->library('excel');
-        $tableView = $this->Excel_model->get_response2($survey_id, $id, $startDate, $endDate);
+        $sql = "select * from survey_answer1 where survey_id='".$survey_id."' and restaurant_id='".$id."' and answer_date >= '".$startDate."' and answer_date < ('".$endDate."' + INTERVAL 1 DAY) ";
+        if($waiter_id != 'all'){
+            $sql .= " and waiter_code = '$waiter_id' ";
+        }
+        if($device_id != 'all'){
+            $sql .= " and device_imei = '$device_id' ";
+        }
+        
+        $tableView = $this->Excel_model->responseGetSql($sql);
         $question = $this->Excel_model->questions($survey_id, $id);
         $json1 = $question->options;
         $json_data = json_decode($json1, true);
@@ -84,10 +94,10 @@ class Excel_export_Controller extends MY_Controller{
 //        $objPHPExcel->getActiveSheet()->SetCellValue('D1', 'Device Time'); //4
         $i = 1;
         $ques_array = array();
+        $q_seq = array();
         foreach ($json_data['question'] as $Qcount=> $Qrow):
-           // $abcd = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V',];
-//            $objPHPExcel->getActiveSheet()->SetCellValue($abcd[$Qcount+4].'1', $json_data['question'][$Qcount]['text']['en']);
-        $ques_array[] = $json_data['question'][$Qcount]['text']['en'];
+            $ques_array[] = $json_data['question'][$Qcount]['text']['en'];
+            array_push($q_seq, $json_data['question'][$Qcount]['sequence_no']);
             $i++;
         endforeach;
         array_push($ques_array, 'score');
@@ -105,6 +115,7 @@ class Excel_export_Controller extends MY_Controller{
             $star=0; $smiley=0; $nps=0; $mstar=0;
             $star_total=0; $smiley_total=0; $nps_total=0; $mstar_total=0;
             foreach ($json_table['response'] as $j_count=>$j_view){
+                if(in_array($json_table['response'][$j_count]['sequence_no'], $q_seq)){
                 $q_id=0;
                 $check = $json_table['response'][$j_count]['type'];
                 if($check == 1 ){
@@ -226,9 +237,9 @@ class Excel_export_Controller extends MY_Controller{
                    $xl = '-';
                    array_push($x12, $xl);
                }
+            } //array_push condition check value
         }
-         $obtain = ((int)$star + (int)$smiley + (int)$nps + (int)$mstar);
-
+        $obtain = ((int)$star + (int)$smiley + (int)$nps + (int)$mstar);
         $total = $star_total + $smiley_total + $nps_total + $mstar_total; 
 
         $score_cal = (($obtain/$total)*10)/2;
@@ -256,5 +267,33 @@ class Excel_export_Controller extends MY_Controller{
         // download file
         header("Content-Type: application/vnd.ms-excel");
         redirect('uploads/excel/' . $fileName);
+    }
+    
+    public function check_excel(){
+        $id = $this->session->userdata('admin_id');
+        $survey_id = $this->input->post('survey_id');
+        $startDate = date('Y-m-d', strtotime($this->input->post('startDate')));
+        $endDate = date('Y-m-d', strtotime($this->input->post('endDate')));
+
+       echo $waiter_id = $this->input->post('waiter_id1');
+       echo '<br>';
+       echo $device_id = $this->input->post('device_id1');
+        $fileName = 'data-' . time() . '.xlsx';
+        // load excel library
+        $this->load->library('excel');
+        $sql = "select * from survey_answer1 where survey_id='".$survey_id."' and restaurant_id='".$id."' and answer_date >= '".$startDate."' and answer_date < ('".$endDate."' + INTERVAL 1 DAY) ";
+        if($waiter_id != 'all'){
+            $sql .= " and waiter_code = '$waiter_id' ";
+        }
+        if($device_id != 'all'){
+            $sql .= " and device_imei = '$device_id' ";
+        }
+        
+        $tableView = $this->Excel_model->responseGetSql($sql);
+        $question = $this->Excel_model->questions($survey_id, $id);
+        $json1 = $question->options;
+        $json_data = json_decode($json1, true);
+        
+        print_r($sql); 
     }
 }
