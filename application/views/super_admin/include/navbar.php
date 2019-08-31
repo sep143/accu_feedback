@@ -8,7 +8,7 @@
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg">
           <img src="<?= base_url() ?>image/app_logo.png" class="" alt="Logo" width="30px" height="35px">
-          <b>Smart</b> Survey</span>
+          <b>Accu</b> Feedback</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">

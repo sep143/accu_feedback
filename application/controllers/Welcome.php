@@ -12,7 +12,12 @@ class Welcome extends CI_Controller {
         public function index(){
             $this->load->view('web/index');
         }
-     
+        
+
+        public function privacy_policy() {
+            $this->load->view('web/privacy_policy');
+        }
+
 //web site new user create
     public function new_user(){
         $this->load->model('admin/Commen_model','Commen_model');
@@ -51,6 +56,63 @@ class Welcome extends CI_Controller {
     
 //web site to send mail 
     public function contact_mail(){
+        $this->load->model('Web_model');
+        $this->form_validation->set_rules('name','Name','required|trim|xss_clean');
+        $this->form_validation->set_rules('email','Email Address','required|trim|xss_clean|valid_email');
+        $this->form_validation->set_rules('mobile','Mobile No.','required|trim|xss_clean|min_length[10]|max_length[10]');
+        $this->form_validation->set_rules('message','Message','required|trim|xss_clean');
+        if($this->form_validation->run()==FALSE){
+            $this->index();
+        }else{
+            $enquiry = array(
+                'name'=>  $this->input->post('name'),
+                'email'=>  $this->input->post('email'),
+                'mobile'=>  $this->input->post('mobile'),
+                'message'=>  $this->input->post('message'),
+            );
+            $this->Web_model->enquiry_add($enquiry);
+            $email = $this->input->post('email');
+            $name = $this->input->post('name');
+            $mobile = $this->input->post('mobile');
+            $recive_msg = $this->input->post('message');
+            if (!empty($email)) {
+                $msg['message'] = $recive_msg;
+                $msg['mobile'] = $mobile;
+                $msg['name'] = $name;
+                $msg['email'] = $email;
+                $message = $this->load->view('web/contactUs_mail.php', $msg, true);
+                $config = Array(
+                    'protocol' => 'smtp',
+                    'smtp_host' => 'mail.accufeedback.com',//'ssl://smtp.googlemail.com',
+                    'smtp_port' => 25,//465,
+                    'smtp_user' => 'contact@accufeedback.com', // change it to yours
+                    'smtp_pass' => 'Contact@pass', // change it to yours
+                    'mailtype' => 'html',
+                    'charset' => 'iso-8859-1',
+                    //'priority' => '1',
+                    'wordwrap' => TRUE
+                );
+                $this->load->library('email', $config);
+                $this->email->set_newline("\r\n");
+                $this->email->from("Contact US mail",$email);
+                $this->email->to("contact@accufeedback.com");
+                $this->email->subject('Contact Us mail');
+                $this->email->message($message);
+                $this->email->set_header('MIME-Version', '1.0; charset=utf-8');
+                $this->email->set_header('Content-type', 'text/html');
+                $this->email->send();
+                echo $this->email->print_debugger();
+               // echo "<script> alert('Send Mail.') </script>";
+                $this->session->set_flashdata('mail_msg', 'Thanks You...');
+                redirect(site_url());
+            }
+        }
+    }
+
+    /**
+     * Backup contact mail function on 13-7-2019 
+     */ 
+    public function contact_mail_bkp(){
         $this->load->model('Web_model');
         $this->form_validation->set_rules('name','Name','required|trim|xss_clean');
         $this->form_validation->set_rules('email','Email Address','required|trim|xss_clean|valid_email');

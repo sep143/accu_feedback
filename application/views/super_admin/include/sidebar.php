@@ -95,6 +95,15 @@ $cur_tab = $this->uri->segment(2)==''?'dashboard1': $this->uri->segment(2);
             </span>
           </a>
         </li>
+          <li id="languages" class="">
+              <a href="<?= site_url('language/list'); ?>">
+            <i class="fa fa-globe"></i>
+            <span>Language</span>
+            <span class="pull-right-container">
+              
+            </span>
+          </a>
+        </li>
 
       </ul>
 

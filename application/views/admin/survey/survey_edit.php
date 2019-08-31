@@ -28,50 +28,271 @@
     float: left;
     text-align: center;
     }
+    .font-size11 {
+        font-size: 12px;
+        color: #6d7186;
+    }
+    .control-size {
+        height: 32px!important;
+    }
+    #customerInfoForm>div{
+        -webkit-box-shadow:0 0 8px rgba(212,213,217,0.8);
+        -moz-box-shadow:0 0 8px rgba(212,213,217,0.8);
+        box-shadow:0 0 8px rgba(212,213,217,0.8);
+    }
+    .container-display{
+      display: none;
+    }
 </style>
 <?php
 $adminRole = ucwords($this->session->userdata('role_id'));
 $otherRole = ucwords($this->session->userdata('m_role_id'));
+
+if($survey_name) {
+$json1 = $survey_name->options;
+$json_data = json_decode($json1, TRUE); 
+
+// echo "<pre>"; print_r($survey_name);
+// echo "<pre>"; print_r($survey_name->customer_info);
+$last_arr_index = ($survey_name->customer_info=="YES")?end($json_data['question']):'';
+
+$cust_info_que_arr = ($survey_name->customer_info=="YES")?$last_arr_index['options']['en']:'';
+// echo "<pre>"; print_r($cust_info_que_arr);
+
+// exit();
+
+($survey_name->customer_info=="YES")?array_pop($json_data['question']):$json_data['question'];
+// print_r($json_data['question']);
+}
 ?>
 
 <section class="content">
     <div class="row">
-        <?php echo form_open(base_url('admin/Survey_C/survey_update'), 'class="form-horizontal"'); ?> 
+        <?php echo form_open(base_url('admin/Survey_C/survey_update'), 'class="form-horizontal"'); 
+            //if start after form close
+        if($survey_name) {
+        ?> 
         <div class="col-md-12">
 
             <div class="col-md-7">
                 <div class="box">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Edit Survey</h3>
+                        <h3 class="box-title">Edit Feedback</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
                     <div class="box-body">
                         <input type="hidden" name="restaurant_id" value="<?= ucwords($this->session->userdata('admin_id')); ?>">
-                        <div class="form-group col-sm-12">
-                            <label>The name is used only to identify this survey. Use the section below to set up your questions.</label>
-                            <label for="surveyname" class=""><b>Name</b></label>
-                            <div class="">
+                        <div class="form-group">
+                            <label class="col-sm-12">The name is used only to identify this feedback. Use the section below to set up your questions.</label>
+                            <label for="surveyname" class="col-sm-12"><b>Name</b></label>
+                            <div class="col-sm-12">
                                 <input type="hidden" name="survey_id" value="<?= $survey_name->survey_id; ?>">
-                                <input type="text" name="surveyname" value="<?= $survey_name->survey_name; ?>" class="form-control" id="firstname" placeholder="Enter Survey Name" required="">
+                                <input type="text" name="surveyname" value="<?= $survey_name->survey_name; ?>" class="form-control" id="firstname" placeholder="Enter Feedback Name" required="">
+                            </div>
+
+                            <div class="col-sm-12">
+                                <br>
+                                <?php 
+                                  if($survey_name->customer_info=="YES"&&!empty($survey_name->customer_info)) {
+
+                                ?>
+                                <input type="hidden" name="customerInfoIsRequired" value="NO">
+                                <input type="checkbox" name="customerInfoIsRequired" id="is_info_required" value="<?=$survey_name->customer_info?>" checked="">
+                                 <?php 
+                                  } else {
+                                ?>
+                                  <input type="hidden" name="customerInfoIsRequired" value="NO">
+                                  <input type="checkbox" name="customerInfoIsRequired" id="is_info_required" value="<?=$survey_name->customer_info?>">
+                                <?php 
+                                  }
+                                ?>
+                                <label for="surveyname" ><b>Customer Info is Required</b> 
+                                    <span data-toggle="popover" title="Check the checkbox, if you require customer info." data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><i class="fa fa-info-circle"></i></span>
+                                </label>
+                               
+
+                                
+                            </div>
+                            <!-- <label for="surveyname" class=""><b>Select Language</b></label>
+                            <div class="">
+                                <select class="form-control" name="language_set">
+                                    <?php
+                                    if($language){
+                                        foreach ($language as $lang_value){
+                                            ?>
+                                        <option value="<?= $lang_value->ID; ?>" <?= ($survey_name->language_set == $lang_value->ID)?'selected=""':''; ?> ><?= $lang_value->Name; ?></option>
+                                    <?php
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </div> -->
+
+                        </div>
+
+                        <!-- Customer information form start -->
+                        <?php 
+                          // if($survey_name->customer_info=="YES"&&!empty($survey_name->customer_info)) {
+                        ?>
+                        <div id="customerInfoForm" class="font-size11">
+                            <div style="border: 1px solid #dcd7d7; min-height:280px; height: auto; ">
+                                <div class="form-group input-group" style="padding: 15px 13px; background: #eff0f4; margin-top: 20px; margin-right: 25px; margin-left: 25px;">
+                                    <div class="input-group-addon" style="background: #9c9cb0; color: white;"><i class="fa fa-user"></i></div>
+                                    <textarea class="form-control font-size11" rows="2" name="contactQuestion" id="contact_question" placeholder="exmp: Enter your contact details."><?= ($last_arr_index)?$last_arr_index['text']['en']:'Enter your contact information.'; ?></textarea>
+                                    <!-- <div class="input-group-addon" style="background: #eff0f4; color: #337ab7; cursor: pointer;"><i class="fa fa-close"></i></div> -->
+                                </div>
+                                <div style="padding: 15px 13px; margin-top: 20px; margin-right: -20px; margin-left: 0px;">
+                                    <div class="col-md-12">
+                                        <div class="form-group col-md-3">
+                                            <input type="hidden" class="contact-form-field" name="contactFieldType[0]" value="text">
+                                            <select class="form-control font-size11 control-size contact-form-field" name="contactFieldType[0]" disabled="">
+                                                <option value="">--Select--</option>
+                                                <option value="text" selected="">Text</option>
+                                                <option value="email">Email</option>
+                                                <option value="number">Number</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-6 form-group">
+                                           <input type="text" id="" placeholder="exmp: Enter your name." name="contactFieldText[0]" class="form-control font-size11 control-size contact-form-field" value="<?= (!empty($cust_info_que_arr))? $cust_info_que_arr[0]['label']:'Enter your full name.' ?>">
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-2 form-group font-size11 control-size">
+                                            <div class="checkbox"> 
+                                              <?php 
+                                              if($cust_info_que_arr) {
+                                                if($cust_info_que_arr[0]['required']=="YES") {
+                                              ?>
+                                                <input type="hidden" name="contactFieldRequired[0]" value="NO">
+                                                <input type="checkbox" value="YES" name="contactFieldRequired[0]" checked="">
+                                              <?php 
+                                                }else {
+                                              ?>
+                                                <input type="hidden" name="contactFieldRequired[0]" value="NO">
+                                                <input type="checkbox" value="YES" name="contactFieldRequired[0]">
+                                              <?php    
+                                                }
+                                              }  else {
+                                              ?>
+                                                <input type="hidden" name="contactFieldRequired[0]" value="NO">
+                                                <input type="checkbox" value="YES" name="contactFieldRequired[0]">
+                                              <?php  
+                                                }
+                                              ?>  
+                                                <span>Mandatory</span> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group col-md-3">
+                                            <input type="hidden" name="contactFieldType[1]" value="email">
+                                            <select class="form-control font-size11 control-size" name="contactFieldType[1]" disabled="">
+                                                <option value="">--Select--</option>
+                                                <option value="text">Name</option>
+                                                <option value="email" selected="">Email</option>
+                                                <option value="number">Number</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-6 form-group">
+                                           <input type="text" id="" placeholder="exmp: example@gmail.com " name="contactFieldText[1]" class="form-control font-size11 control-size" value="<?= ($cust_info_que_arr)? $cust_info_que_arr[1]['label']:'Enter your email address.' ?>">
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-2 form-group font-size11 control-size">
+                                            <div class="checkbox"> 
+                                              <?php 
+                                              if($cust_info_que_arr) {
+                                                if($cust_info_que_arr[1]['required']=="YES") {
+                                              ?>
+                                                <input type="hidden" name="contactFieldRequired[1]" value="NO">
+                                                <input type="checkbox" value="YES" name="contactFieldRequired[1]" checked="">
+                                              <?php 
+                                                }else {
+                                              ?>
+                                                <input type="hidden" name="contactFieldRequired[1]" value="NO">
+                                                <input type="checkbox" value="YES" name="contactFieldRequired[1]">
+                                              <?php    
+                                                }
+                                              }
+                                              else {
+                                              ?>  
+                                                <input type="hidden" name="contactFieldRequired[1]" value="NO">
+                                                <input type="checkbox" value="YES" name="contactFieldRequired[1]">
+                                              <?php 
+                                                }
+                                              ?>  
+                                                <span>Mandatory</span> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group col-md-3">
+                                            <input type="hidden" name="contactFieldType[2]" value="number">
+                                            <select class="form-control font-size11 control-size" name="contactFieldType[2]" disabled="">
+                                                <option value="">--Select--</option>
+                                                <option value="name">Name</option>
+                                                <option value="email">Email</option>
+                                                <option value="number" selected="">Number</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-6 form-group">
+                                           <input type="text" id="" placeholder="exmp: Enter your mobile number." name="contactFieldText[2]" class="form-control font-size11 control-size" value="<?= ($cust_info_que_arr)? $cust_info_que_arr[2]['label']:'Enter your mobile number.' ?>">
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-2 form-group font-size11 control-size">
+                                            <div class="checkbox"> 
+                                              <?php 
+                                              if($cust_info_que_arr){
+                                                if($cust_info_que_arr[2]['required']=="YES") {
+                                              ?>
+                                                <input type="hidden" name="contactFieldRequired[2]" value="NO">
+                                                <input type="checkbox" value="YES" name="contactFieldRequired[2]" checked="">
+                                              <?php 
+                                                }else {
+                                              ?>
+                                                <input type="hidden" name="contactFieldRequired[2]" value="NO">
+                                                <input type="checkbox" value="YES" name="contactFieldRequired[2]">
+                                              <?php    
+                                                }
+                                              } else {
+                                              ?>  
+                                                <input type="hidden" name="contactFieldRequired[2]" value="NO">
+                                                <input type="checkbox" value="YES" name="contactFieldRequired[2]">
+                                              <?php 
+                                                }
+                                              ?>  
+                                                <span>Mandatory</span> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>    
                             </div>
                         </div>
+                      <?php 
+                        // } 
+                      ?>
+                        <!-- Customer information form end -->
 
                     </div>
                     <!-- /.box-body -->
                 </div>
             </div>
-            <!--Survey Add first box upper-->
-            <!--Survey Question using AJAX code start box-->
+            <!--Feedback Add first box upper-->
+            <!--Feedback Question using AJAX code start box-->
             <div class="" >
                 <div class="question">
-                    <?php $json1 = $survey_name->options;
-                    $json_data = json_decode($json1, TRUE); 
+                  <?php 
+                    // $json1 = $survey_name->options;
+                    // $json_data = json_decode($json1, TRUE); 
+                    $mandatory_field_count = 0;
+                    $data_fields_mandatory_count = 0;
                     if($json1){
                     $i=1;
                     $q=1;
                     foreach ($json_data['question'] as $Qcount=> $Qrow):
-                   ?>
+                  ?>
                 <div class="col-md-7">
                     <div class="box">
                         <div class="box-body">
@@ -103,12 +324,12 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                     </select>
                                 </div>
                                 <div class="col-md-5">
-                                    <input type="hidden" name="mandatory[]" value="NO">
+                                    <input type="hidden" name="mandatory<?=$mandatory_field_count?>" value="NO">
                                 <?php if($json_data['question'][$Qcount]['required'] == 'YES'){ ?>
-                                    <input type="checkbox" name="mandatory[]" class="" value="YES" checked="checked" style="margin: 10px;">
-                                    <!--<input type="hidden" name="mandatory[<?php $i-1; ?>]" value="YES">-->
+                                    <input type="checkbox" name="mandatory<?=$mandatory_field_count?>" class="" value="YES" checked="checked" style="margin: 10px;">
+                                    <!-- <input type="hidden" name="mandatory[<?php $i-1; ?>]" value="YES"> -->
                                 <?php }else{ ?>
-                                      <input type="checkbox" name="mandatory[]" class="" value="YES" style="margin: 10px;">
+                                      <input type="checkbox" name="mandatory<?=$mandatory_field_count?>" class="" value="YES" style="margin: 10px;">
                                       
                                 <?php } ?>
                                     <label class="">Mandatory</label>
@@ -164,8 +385,7 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                             <option value="email">Email</option>
                                             <option value="checkbox">Checkbox</option>
                                             <option value="number">Number</option>
-                                            <option value="date">Date</option>
-                                            <option value="phone">Phone</option>-->
+                                            <option value="date">Date</option>-->
                                         </select>
                                     </div>
                                     <div class="col-md-1"></div>
@@ -175,12 +395,14 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                     <div class="col-md-1"></div>
                                     <div class="col-md-2 form-group">
                                         <?php if($json_data['question'][$Qcount]['options']['en'][$count]['required'] == 'YES'){ ?>
-                                        <div class="checkbox"> 
-                                            <input type="checkbox" value="NO" name="dataFieldmen[<?= $Qcount; ?>][]" checked="checked"><span>Mandatory</span> </div>
+                                        <div class="checkbox">
+                                            <input type="hidden" name="dataFieldmen[<?= $Qcount ?>][<?=$count;?>]" value="NO"> 
+                                            <input type="checkbox" class="chk_cls" value="YES" name="dataFieldmen[<?= $Qcount; ?>][<?=$count;?>]" checked="checked" data-chk-count="<?=$count?>"><span>Mandatory</span> 
+                                        </div>
                                        <?php }else{ ?>
                                            <div class="checkbox">
-                                               <input type="hidden" name="dataFieldmen[<?= $Qcount ?>][]" value="NO"> 
-                                               <input type="checkbox" name="dataFieldmen[<?= $Qcount; ?>][]" value="YES"><span>Mandatory</span> </div>
+                                               <input type="hidden" name="dataFieldmen[<?= $Qcount ?>][<?=$count;?>]" value="NO"> 
+                                               <input type="checkbox" class="chk_cls" name="dataFieldmen[<?= $Qcount; ?>][<?=$count;?>]" value="" data-chk-count="<?=$count?>"><span>Mandatory</span> </div>
                                       <?php } ?>
                                     </div>
                                  </div>
@@ -188,7 +410,7 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                 <?php if($adminRole == 2 || $otherRole == 11){ ?>
                                 <div class="" id="viewData<?= $Qcount+11; ?>"></div>
                                 <div class="">
-                                    <button type="button" class="btn btn-default" id="addData<?= $Qcount+11; ?>"><i class="fa fa-plus"></i> Add Field</button>
+                                    <button type="button" class="btn btn-default" id="addData<?= $Qcount+11; ?>" data-chk-count="<?=$count?>"><i class="fa fa-plus"></i> Add Field</button>
                                 </div> 
                                 <?php } ?>
                                 <?php     // } 
@@ -220,12 +442,13 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                     <?php foreach ($json_data['question'][$Qcount]['options']['en']['matrix_column'] as $count=>$dt): ?>  
                                         <div class="" style="margin:10px;">
                                             <input class="form-control" id="ob_name<?= $count+11; ?>" type="text" name="metrixAnswer[<?= $Qcount; ?>][]" placeholder="" value="<?= $json_data['question'][$Qcount]['options']['en']['matrix_column'][$count]; ?>"/>
+
                                         </div>
                                     <?php  endforeach; ?>
                                     <?php if($adminRole == 2 || $otherRole == 11){ ?>
                                         <div class="" id="matrixAnsView<?= $Qcount+11; ?>">
                                         </div><br>
-                                        <div class="">
+                                        <div class="hidden">
                                             <button type="button" class="btn btn-default" id="matrixAnsAdd<?= $Qcount+11; ?>"><i class="fa fa-plus"></i> Add Option</button>
                                         </div>
                                     <?php } ?>
@@ -285,6 +508,7 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                <?php
                $i++;
                $q++;
+               $mandatory_field_count++;
                     endforeach; //for json formate in questions create
                     } //before loop chlne se pehle value check then loop chale
                     ?>
@@ -302,7 +526,7 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
             </div>
 
 
-            <!--Survey Question using AJAX code end box-->
+            <!--Feedback Question using AJAX code end box-->
         
         <?php if($adminRole == 2 || $otherRole == 11){ ?>
             <div class="col-lg-12 col-xs-12">
@@ -313,13 +537,60 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
         <div class="col-lg-12 col-xs-12"><a href="<?= site_url('admin/Survey_C'); ?>" class="btn btn-default">Back</a></div>
        <?php } ?>
       </div>
-        <?php echo form_close(); ?>
+        <?php 
+            } //end if before form close 
+            echo form_close(); 
+        ?>
     </div>  
 </section> 
 
 <script>
+    
+
    $(document).ready(function () {
-   <?php 
+    $("input[type=checkbox]").on('click',function(){
+
+        // $(this).is(":checked")?alert("checked"):alert("Unchecked");
+        $(this).is(":checked")?$(this).val("YES"):$(this).val("NO");
+        // jQuery(this).closest('[type=checkbox]').attr('checked', true);
+    });
+
+    // $(".chk_cls").on('click',function(){
+    //     $(this).is(":checked")?alert("checked"):alert("Unchecked");
+    //     $(this).is(":checked")?$(this).val("YES"):$(this).val("NO");
+    //     // jQuery(this).closest('[type=checkbox]').attr('checked', true);
+    // });
+
+    if($("#is_info_required").is(":checked")) { 
+        
+        $('#contact_question').prop('required',true);
+
+        $("#customerInfoForm").removeClass('container-display');
+      }else {
+        // alert("unchecked");
+        $("#customerInfoForm").addClass('container-display');
+      }
+
+    $("#is_info_required").click(function(){
+        var customerInfoIsRequired = ($("#is_info_required").is(":checked"))?"YES":"NO";
+        $(this).val(customerInfoIsRequired);
+        // $("#contact_question").attr("required","");
+        ($("#is_info_required").is(":checked"))?$('#contact_question').prop('required',true):$('#contact_question').removeAttr('required');
+
+        if($(this).val() == "YES") {
+            $("#customerInfoForm").slideDown(1000);
+        }
+        else {
+            $("#customerInfoForm").slideUp(1000);
+            // for(var i=0; i<2; i++) {
+            //     // $("[name=contactFieldText["+i+"]]").html("");    
+            //     $('input[name=contactFieldText['+i+']]').html("");
+            // }
+        }
+
+    });
+
+ <?php 
    $qi=0;
    foreach ($json_data['question'] as $Qcount=> $Qrow):
        $qi++;
@@ -336,6 +607,8 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
         //var s_id = 10;
         var divLen = $('div.iBox').length;
         //x = divLen+2;
+        var mandatory_field_count = "<?=$mandatory_field_count;?>";
+        var data_fields_mandatory_count = 0;
         $(add_button).click(function (e) { //on add input button click
             e.preventDefault();
             x++; //text box increment
@@ -351,7 +624,7 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                          <div class="box-body">\n\
                             <input type="hidden" name="sequence_no[]" id="sequence_'+ x +'" value="'+ (q_id + 1) +'">\n\\n\
                             <input type="hidden" name="sequence_delete['+q_id+']" id="sequence_delete">\n\
-                            <div class="form-group input-group" style="padding: 19px 17px; background: #eff0f4; margin-top: -20px; margin-right: -21px; margin-left: -21px;">\n\
+                            <div class="form-group input-group" style="padding: 19px 17px; background: #eff0f4; margin-top: -41px; margin-right: -21px; margin-left: -21px;">\n\
                                 <div class="input-group-addon order" style="background: #9c9cb0; color: white;">'+z+'</div>\n\
                                 <textarea class="form-control" rows="2" name="question[]" id="qType'+x+'" required=""></textarea>\n\
                                 <div class="input-group-addon" id="remove_field" style="background: #eff0f4; color: #337ab7; cursor: pointer;" ><i class="fa fa-close"></i></div>\n\
@@ -365,7 +638,7 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                     </select>\n\
                                 </div>\n\
                                 <div class="col-md-5">\n\
-                                    <input type="hidden" value="NO" name="mandatory[]"> <input type="checkbox" name="mandatory[]" class="" value="YES">\n\
+                                    <input type="hidden" value="NO" name="mandatory'+mandatory_field_count+'"> <input type="checkbox" name="mandatory'+mandatory_field_count+'" class="" value="YES">\n\
                                     <label class="">Mandatory</label>\n\
                                 </div>\n\
                             </div>\n\
@@ -393,8 +666,10 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                         <div class="box-body" ><div id="selectType'+x+'"></div><div id="typeDiv'+x+'"></div></div>\n\
                         </div>\n\
                 </div>\n\
-                </div>'); //add input box
-          
+                </div>'
+                ); //add input box
+
+              mandatory_field_count++;
             }
             
             $.ajax({
@@ -499,7 +774,7 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                 </div>');
                         $("#addDiv_new"+id).click(function() {
                             $("#viewDiv_new"+id).append('<div id="viewDivDel'+id+b+'" class="input-group" style="margin:10px;"><input id="optionText'+id+b+'" class="form-control" type="text" name="optionName['+q_id+'][]" placeholder="" /><span class="input-group-btn"><button class="btn btn-default" id="dltOption">X</button></span></div>');
-                            $("#typeDiv"+id).append('<div class="" id="delDiv'+id+b+'"><div><div style="float: left; width: 40%;" id="optionTextView'+id+b+'">&nbsp;</div><div style="float: left; width: 60%;"><img src="<?= base_url(); ?>image/survey/multismiley.png" alt="Star" width="70%" align="middle"></div></div></div>');
+                            $("#typeDiv"+id).append('<div class="" id="delDiv'+id+b+'"><div><div style="float: left; width: 45%;" id="optionTextView'+id+b+'">&nbsp;</div><div style="float: left; width: 55%;"><img src="<?= base_url(); ?>image/survey/smiley.png" alt="Star" width="100%" align="middle"></div></div></div>');
                             $('input[id^="optionText"]').on('input',function(){
                                 var data = $(this).val();
                                 var check1 = $(this).attr('id').slice(-4);
@@ -693,7 +968,6 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                             <option value="checkbox">Checkbox</option>\n\
                                             <option value="number">Number</option>\n\
                                             <option value="date">Date</option>\n\
-                                            <option value="phone">Phone</option>\n\
                                         </select>\n\
                                     </div>\n\
                                     <div class="col-md-1"></div>\n\
@@ -702,7 +976,7 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                     </div>\n\
                                     <div class="col-md-1"></div>\n\
                                     <div class="col-md-2 form-group">\n\
-                                        <div class="checkbox"><input type="hidden" name="dataFieldmen['+ q_id +'][]" value="NO"> <input type="checkbox" name="dataFieldmen['+ q_id +'][]" value="YES"><span>Mandatory</span> </div>\n\
+                                        <div class="checkbox"><input type="hidden" name="dataFieldmen['+ q_id +']['+data_fields_mandatory_count+']" value="NO"> <input type="checkbox" class="chk_cls" name="dataFieldmen['+ q_id +']['+data_fields_mandatory_count+']" aaaa value="YES"><span>Mandatory</span> </div>\n\
                                     </div>\n\
                                  </div>\n\
                                 <div class="" id="viewData_new'+x+'">\n\
@@ -712,6 +986,7 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                         <button type="button" class="btn btn-default" id="addData_new'+x+'"><i class="fa fa-plus"></i> Add Field</button>\n\
                                     </div> \n\
                                 </div>');
+                          data_fields_mandatory_count++;
                          $("#addData_new"+id).click(function() {
                             $("#viewData_new"+id).append('<div class="col-md-12" id="delField'+id+g+'">\n\
                                     <div class="form-group col-md-3">\n\
@@ -722,7 +997,6 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                             <option value="checkbox">Checkbox</option>\n\
                                             <option value="number">Number</option>\n\
                                             <option value="date">Date</option>\n\
-                                            <option value="phone">Phone</option>\n\
                                         </select>\n\
                                     </div>\n\
                                     <div class="col-md-1"></div>\n\
@@ -731,9 +1005,10 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                     </div>\n\
                                     <div class="col-md-1"></div>\n\
                                     <div class="col-md-2 form-group">\n\
-                                        <div class="checkbox"><input type="hidden" name="dataFieldmen['+ q_id +'][]" value="NO"> <input type="checkbox" value="YES" name="dataFieldmen['+ q_id +'][]"><span>Mandatory</span><span id="dltDataField"  class="btn btn-default" style="margin-left: 81px; margin-top: -47px;">X</span></div>\n\
+                                        <div class="checkbox"><input type="hidden" name="dataFieldmen['+ q_id +']['+data_fields_mandatory_count+']" value="NO"> <input type="checkbox" value="YES" bbbb class="chk_cls" name="dataFieldmen['+ q_id +']['+data_fields_mandatory_count+']"><span>Mandatory</span><span id="dltDataField"  class="btn btn-default" style="margin-left: 81px; margin-top: -47px;">X</span></div>\n\
                                     </div>\n\
                                  </div>');
+
                             $("#typeDiv"+id).append('<div id="delDiv'+id+g+'"><div><span id="optionTextView'+id+g+'">&nbsp;</span></div><div class=""><hr style="height:1px;border:none;color:#333;background-color:#333;" /></div></div>');
                             $('input[id^="optionText"]').on('input',function(){
                                 var data = $(this).val();
@@ -741,6 +1016,7 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                 var check1 = $(this).attr('id').slice(-4);
                                 $("#optionTextView"+check1).text(data);
                             });
+                            data_fields_mandatory_count++;
                         g++;
                         });
                         $('input[id^="optionText"]').on('input',function(){
@@ -804,13 +1080,24 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                         </div>\n\
                                         <div class="" id="matrixAnsView_new'+x+'">\n\
                                         </div><br>\n\
-                                        <div class="">\n\
+                                        <div class="hidden">\n\
                                             <button type="button" class="btn btn-default" id="matrixAnsAdd_new'+x+'"><i class="fa fa-plus"></i> Add Option</button>\n\
                                         </div> \n\
                                     </div>\n\
                                 </div></div>');
                     //matrix row add
+                        $('#matrixQuView_new'+id).append('<div id="matrixRow'+id+h+'" class="form-group" style="margin:10px;"><input id="optionText'+id+h+'" class="form-control" type="text" name="optionMetrix['+q_id+'][]" placeholder="" required/></div>');
+                        
+                        $('#typeDiv'+id).append('<div id="delMetrix'+id+h+'"><div class="col-md-6"><span id="optionTextView'+id+h+'"></span></div><div class="col-md-6"><div id="colss'+id+h+'"></div></div></div>');
+                        
+                        $('input[id^="optionText"]').on('input',function(){
+                                var data = $(this).val();
+                                var check1 = $(this).attr('id').slice(-4);
+                                $("#optionTextView"+check1).text(data);
+                            });
+
                         $('#matrixQuAdd_new'+id).click(function(){
+                        h=h+1;    
                             $('#matrixQuView_new'+id).append('<div id="matrixRow'+id+h+'" class="input-group" style="margin:10px;"><input id="optionText'+id+h+'" class="form-control" type="text" name="optionMetrix['+q_id+'][]" placeholder="" /><span class="input-group-btn"><button class="btn btn-default" id="dltOption">X</button></span></div>');
                             $('#typeDiv'+id).append('<div id="delMetrix'+id+h+'"><div class="col-md-6"><span id="optionTextView'+id+h+'"></span></div><div class="col-md-6"><div id="colss'+id+h+'"></div></div></div>');
                             var cl = h-1;
@@ -823,31 +1110,40 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                             });
                         h++;
                         });
+                        
                         $('input[id^="optionText"]').on('input',function(){
                             var data = $(this).val();
                             var check1 = $(this).attr('id').slice(-3);
                             $("#optionTextView"+check1).text(data);
                         });
+
+
+
                         $('#matrixQuView_new'+id).on('click','#dltOption', function() {
                             var idx = $(this).closest('div').attr('id').slice(-4);
                             $(this).closest('div').remove();
                             $('#delMetrix'+idx).closest('div').remove();
                         });
                       //matrix in column Add
-                        $('#matrixAnsAdd_new'+id).click(function() {
-                            $('#matrixAnsView_new'+id).append('<div id="matrixCol'+id+hh_n+'" class="input-group" style="margin:10px;"><input id="columnText'+id+hh_n+'" class="form-control" type="text" name="metrixAnswer['+q_id+'][]" placeholder="" /><span class="input-group-btn"><button class="btn btn-default" id="dltOption">X</button></span></div>');
-                            if(hh_n > 11){
-                                $('.columnAdd'+id).append('<div class="option9 del_type'+id+hh_n+' columnTextView'+id+hh_n+'" style="border-color: rgb(106, 193, 131); color: rgb(106, 193, 131);">&nbsp;</div>');
-                            }else{
-                                $('#colss'+id+hh_n).append('<div class="option9 del_type'+id+hh_n+' columnTextView'+id+hh_n+'" style="border-color: rgb(106, 193, 131); background-color: rgb(106, 193, 131); color: rgb(255, 255, 255);">&nbsp;</div><div class="columnAdd'+id+'"></div>');
-                            }
+                        // $('#matrixAnsAdd_new'+id).click(function() {
+                            $('#matrixAnsView_new'+id).append('<div id="matrixCol'+id+hh_n+'" class="form-group" style="margin:10px;"><input id="columnText'+id+hh_n+'" class="form-control" type="text" name="metrixAnswer['+q_id+'][]" placeholder="" value="Agree"/></div>     <div id="matrixCol'+id+hh_n+'" class="form-group" style="margin:10px;"><input id="columnText'+id+hh_n+'" class="form-control" type="text" name="metrixAnswer['+q_id+'][]" placeholder="" value="Neutral"/></div>                <div id="matrixCol'+id+hh_n+'" class="form-group" style="margin:10px;"><input id="columnText'+id+hh_n+'" class="form-control" type="text" name="metrixAnswer['+q_id+'][]" placeholder="" value="Disagree"/></div>');
+
+                            $('#colss'+id+hh_n).append('<div class="option9 del_type'+id+hh_n+' columnTextView'+id+hh_n+'" style="border-color: rgb(106, 193, 131); background-color: rgb(106, 193, 131); color: rgb(255, 255, 255);">Agree</div><div class="columnAdd'+id+'"></div>');
+
+                            $('.columnAdd'+id).append('<div class="option9 del_type'+id+hh_n+' columnTextView'+id+hh_n+'" style="border-color: rgb(106, 193, 131); color: rgb(106, 193, 131);">Neutral</div> <div class="option9 del_type'+id+hh_n+' columnTextView'+id+hh_n+'" style="border-color: rgb(106, 193, 131); color: rgb(106, 193, 131);">Disagree</div>');
+
+                            // if(hh_n > 11){
+                            //     $('.columnAdd'+id).append('<div class="option9 del_type'+id+hh_n+' columnTextView'+id+hh_n+'" style="border-color: rgb(106, 193, 131); color: rgb(106, 193, 131);">&nbsp;</div>');
+                            // }else{
+                            //     $('#colss'+id+hh_n).append('<div class="option9 del_type'+id+hh_n+' columnTextView'+id+hh_n+'" style="border-color: rgb(106, 193, 131); background-color: rgb(106, 193, 131); color: rgb(255, 255, 255);">&nbsp;</div><div class="columnAdd'+id+'"></div>');
+                            // }
                             $('input[id^="columnText"]').on('input',function(){
                                 var data = $(this).val();
                                 var check1 = $(this).attr('id').slice(-4);
                                 $(".columnTextView"+check1).text(data);
                             });
-                        hh_n++;
-                        });
+                        // hh_n++;
+                        // });
                          $('input[id^="columnText"]').on('input',function(){
                             var data = $(this).val();
                             var check1 = $(this).attr('id').slice(-3);
@@ -875,9 +1171,9 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
          $(wrapper).on("click", "#remove_field", function (e) { //user click on remove text
             e.preventDefault();
                 $(this).parent().parent().parent().parent().parent().closest('div').remove();
-                $('div.order').text(function (x){
-                   // return x + <?= $qi+1; ?>;
-                });
+                // $('div.order').text(function (x){
+                //    // return x + <?= $qi+1; ?>;
+                // });
             });
     });
 </script>
@@ -889,6 +1185,9 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
   $json1 = str_replace("'", "", $json1);
   $json_data = json_decode($json1, TRUE ,  JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK); 
     $i=1;
+
+if($json_data['question']) {
+
     foreach ($json_data['question'] as $Qcount=> $Qrow):
   ?>
         $(document).ready(function(){
@@ -965,7 +1264,7 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                 }else if(selectOption == 4){
                      <?php  if($json_data['question'][$Qcount]['type'] == 4){
                         foreach ($json_data['question'][$Qcount]['options']['en'] as $option_count => $option_data): ?>
-                        $("#typeDiv"+id).append('<div class="" id="delDiv'+id+'"><div><div style="float: left; width: 40%; margin-top: 7px;" id="v_name'+id+'<?= $option_count+11; ?>"><?php echo  $json_data['question'][$Qcount]['options']['en'][$option_count]; ?></div><div style="float: left; width: 60%;"><img src="<?= base_url(); ?>image/survey/multismiley.png" alt="Star" width="70%" align="middle"></div></div></div>');
+                        $("#typeDiv"+id).append('<div class="" id="delDiv'+id+'"><div><div style="float: left; width: 45%; margin-top: 7px; margin:5px 0px;" id="v_name'+id+'<?= $option_count+11; ?>"><?php echo  $json_data['question'][$Qcount]['options']['en'][$option_count]; ?></div><div style="float: left; width: 55%;"><img src="<?= base_url(); ?>image/survey/smiley.png" alt="Star" width="100%" align="middle"></div></div></div>');
                     <?php  endforeach; 
                     } ?>
                     $('input[id^="o_name"]').on('input',function(){
@@ -977,7 +1276,7 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                         var b = 11;
                         $("#addDiv"+id).click(function() {
                             $("#viewDiv"+id).append('<div id="viewDiv'+id+b+'" class="input-group" style="margin:10px;"><input id="optionText'+id+b+'" class="form-control" type="text" name="optionName[<?= $Qcount; ?>][]" placeholder="" /><span class="input-group-btn"><button class="btn btn-default" id="dltOption">X</button></span></div>');
-                            $("#typeDiv"+id).append('<div class="" id="delDiv'+id+b+'"><div><div style="float: left; width: 40%; margin-top: 7px;" id="optionTextView'+id+b+'">&nbsp;</div><div style="float: left; width: 60%;"><img src="<?= base_url(); ?>image/survey/multismiley.png" alt="Star" width="70%" align="middle"></div></div></div>');
+                            $("#typeDiv"+id).append('<div class="" id="delDiv'+id+b+'"><div><div style="float: left; width: 45%; margin-top: 7px; margin:5px 0px;" id="optionTextView'+id+b+'">&nbsp;</div><div style="float: left; width: 55%;"><img src="<?= base_url(); ?>image/survey/smiley.png" alt="Star" width="100%" align="middle"></div></div></div>');
                             $('input[id^="optionText"]').on('input',function(){
                                 var data = $(this).val();
                                 var check1 = $(this).attr('id').slice(-4);
@@ -1154,8 +1453,19 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                         $("#v_name"+l_id).text(data);
                     });
                  $('#DataField'+id).show();
+
                  var g = 11;
+                  
                          $("#addData"+id).click(function() {
+                            // $(this).closest('[type=checkbox]').attr('checked', true);
+                            // $(this).html("Hello");
+                            // var chk; 
+                            // chk = $(this).find("#DataField"+id).closest("input.chk_cls:last-child").data("chk-count");
+                            var chk_count = $(this).data("chk-count");
+                            chk_count = chk_count+1;
+                            // alert(chk_count);
+                            // console.log($(this).closest('span').html());
+
                             $("#viewData"+id).append('<div class="col-md-12" id="delField'+id+g+'">\n\
                                     <div class="form-group col-md-3">\n\
                                         <select class="form-control" name="optionData[<?= $i-1; ?>][]">\n\
@@ -1165,7 +1475,6 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                             <option value="checkbox">Checkbox</option>\n\
                                             <option value="number">Number</option>\n\
                                             <option value="date">Date</option>\n\
-                                            <option value="phone">Phone</option>\n\
                                         </select>\n\
                                     </div>\n\
                                     <div class="col-md-1"></div>\n\
@@ -1174,7 +1483,7 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                     </div>\n\
                                     <div class="col-md-1"></div>\n\
                                     <div class="col-md-2 form-group">\n\
-                                        <div class="checkbox"> <input type="hidden" name="dataFieldmen[<?= $i-1; ?>][]" value="NO"><input type="checkbox" value="YES" name="dataFieldmen[<?= $i-1; ?>][]"><span>Mandatory</span><span id="dltDataField"  class="btn btn-default" style="margin-left: 81px; margin-top: -47px;">X</span></div>\n\
+                                        <div class="checkbox"> <input type="hidden" name="dataFieldmen[<?= $i-1; ?>]['+chk_count+']" value="NO"><input type="checkbox" value="YES" cccc class="chk_cls" name="dataFieldmen[<?= $i-1; ?>]['+chk_count+']"><span>Mandatory</span><span id="dltDataField"  class="btn btn-default" style="margin-left: 81px; margin-top: -47px;">X</span></div>\n\
                                     </div>\n\
                                  </div>');
                             $("#typeDiv"+id).append('<div class="" id="delDiv'+id+g+'"><div><span id="optionTextView'+id+g+'">&nbsp;</span></div><div class=""><hr style="height:1px;border:none;color:#333;background-color:#333;" /></div></div>');
@@ -1184,6 +1493,9 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                                 $("#optionTextView"+check1).text(data);
                             });
                         g++;
+                        // alert(chk_count);
+                          $(this).data("chk-count",chk_count);
+                        // chk_count++;
                         });
                         $('#viewData'+id).on('click', '#dltDataField', function() {
                             //a--;
@@ -1303,11 +1615,15 @@ $otherRole = ucwords($this->session->userdata('m_role_id'));
                 $('#delTypeDiv<?= $Qcount+11; ?>').closest('div').hide();
 //                $(this).parent().parent().parent().closest('div').remove();
 //                $('#delTypeDiv<?= $Qcount+11; ?>').closest('div').remove();
-                $('div.order').text(function (x){
-                    //return <?= $q = $q; ?>;
-                });
+                // $('div.order').text(function (x){
+                //     //return <?= $q = $q; ?>;
+                // });
             });
-   <?php $i++; endforeach; ?>   
+   <?php 
+   $i++; endforeach; 
+} // if end
+
+   ?>   
         
     });
 </script>

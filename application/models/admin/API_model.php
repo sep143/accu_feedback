@@ -4,7 +4,7 @@ defined('BASEPATH')OR exit('No direct script access allowed');
 class API_model extends CI_Model{
     
     public function get_imei($imei){
-        $sql = "select restaurant_id, survey_id, branding_id, status from survey_device where device_imei='".$imei."'";
+        $sql = "select restaurant_id, survey_id, branding_id, status, device_name from survey_device where device_imei='".$imei."'";
         $data = $this->db->query($sql, $imei);
         return $data->row();
     }

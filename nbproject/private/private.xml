@@ -2,6 +2,10 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/xampp/htdocs/project_1/application/models/super_admin/Setting_model.php</file>
+            <file>file:/C:/xampp/htdocs/project_1/application/controllers/super_admin/SettingSuperController.php</file>
+            <file>file:/C:/xampp/htdocs/project_1/application/config/routes.php</file>
+        </group>
     </open-files>
 </project-private>

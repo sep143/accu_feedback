@@ -42,7 +42,7 @@ class Devices_model extends CI_Model{
     }
     //edit device than use
     function get_allSurvey($id){
-        $sql = "select survey_id,survey_name from surveys where restaurant_id=?";
+        $sql = "select survey_id,survey_name,b.Name as lang_name from surveys a left join language_survey b on a.language_set=b.ID where a.restaurant_id=?";
         $data = $this->db->query($sql, $id);
         return $data->result();
     }

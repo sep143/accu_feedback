@@ -28,6 +28,19 @@
     float: left;
     text-align: center;
     }
+    .font-size11 {
+        font-size: 12px;
+        color: #6d7186;
+    }
+    .control-size {
+        height: 32px!important;
+    }
+    #customerInfoForm>div{
+        -webkit-box-shadow:0 0 8px rgba(212,213,217,0.8);
+        -moz-box-shadow:0 0 8px rgba(212,213,217,0.8);
+        box-shadow:0 0 8px rgba(212,213,217,0.8);
+    }
+
 </style>
 
 <section class="content" ng-app="">
@@ -38,26 +51,132 @@
             <div class="col-md-7">
                 <div class="box">
                     <div class="box-header with-border">
-                        <h3 class="box-title">New Survey</h3>
+                        <h3 class="box-title">New Feedback</h3>
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
                     <div class="box-body">
                         <input type="hidden" name="restaurant_id" value="<?= ucwords($this->session->userdata('admin_id')); ?>">
                         <div class="form-group">
-                            <label class="col-sm-12">The name is used only to identify this survey. Use the section below to set up your questions.</label>
+                            <label class="col-sm-12">The name is used only to identify this feedback. Use the section below to set up your questions.</label>
                             <label for="surveyname" class="col-sm-12"><b>Name</b></label>
                             <div class="col-sm-12">
-                                <input type="text" name="surveyname" class="form-control" id="firstname" placeholder="Enter Survey Name" required="">
+                                <input type="text" name="surveyname" class="form-control" id="firstname" placeholder="Enter Feedback Name" required="">
                             </div>
+
+                            
+                            <div class="col-sm-12">
+                                <br>
+                                <input type="hidden" name="customerInfoIsRequired" value="NO">
+                                <input type="checkbox" name="customerInfoIsRequired" id="is_info_required" value="NO">
+                                <label for="surveyname" ><b>Customer Info is Required</b> 
+                                    <span data-toggle="popover" title="Check the checkbox, if you require customer info." data-placement="right" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><i class="fa fa-info-circle"></i></span>
+                                </label>
+                            </div>
+
+                            <!-- <label for="surveyname" class="col-sm-12"><b>Select Language</b></label>
+                            <div class="col-sm-12">
+                                <select class="form-control" name="language_set">
+                                    <?php
+                                    if($language){
+                                        foreach ($language as $lang_value){
+                                            ?>
+                                        <option value="<?= $lang_value->ID; ?>"><?= $lang_value->Name; ?></option>
+                                    <?php
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </div> -->
+
                         </div>
 
+                        <div id="customerInfoForm" class="font-size11" style="display: none; ">
+                            <div style="border: 1px solid #dcd7d7; min-height:280px; height: auto; ">
+                                <div class="form-group input-group" style="padding: 15px 13px; background: #eff0f4; margin-top: 20px; margin-right: 25px; margin-left: 25px;">
+                                    <div class="input-group-addon" style="background: #9c9cb0; color: white;"><i class="fa fa-user"></i></div>
+                                    <textarea class="form-control font-size11" rows="2" name="contactQuestion" id="contact_question" placeholder="exmp: Enter your contact information.">Enter your contact information.</textarea>
+                                    <!-- <div class="input-group-addon" style="background: #eff0f4; color: #337ab7; cursor: pointer;"><i class="fa fa-close"></i></div> -->
+                                </div>
+                                <div style="padding: 15px 13px; margin-top: 20px; margin-right: -20px; margin-left: 0px;">
+                                    <div class="col-md-12">
+                                        <div class="form-group col-md-3">
+                                            <input type="hidden" class="contact-form-field" name="contactFieldType[0]" value="text">
+                                            <select class="form-control font-size11 control-size contact-form-field" name="contactFieldType[0]" disabled="">
+                                                <option value="">--Select--</option>
+                                                <option value="text" selected="">Text</option>
+                                                <option value="email">Email</option>
+                                                <option value="number">Number</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-6 form-group">
+                                           <input type="text" id="contact_info_field0" name="contactFieldText[0]" class=" form-control font-size11 control-size contact-form-field" placeholder="exmp: Enter your full name." value="Enter your full name." >
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-2 form-group font-size11 control-size">
+                                            <div class="checkbox"> 
+                                                <input type="hidden" name="contactFieldRequired[0]" value="NO">
+                                                <input type="checkbox" value="YES" name="contactFieldRequired[0]" class="contact_info_chk0">
+                                                <span>Mandatory</span> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group col-md-3">
+                                            <input type="hidden" name="contactFieldType[1]" value="email">
+                                            <select class="form-control font-size11 control-size" name="contactFieldType[1]" disabled="">
+                                                <option value="">--Select--</option>
+                                                <option value="name">Name</option>
+                                                <option value="email" selected="">Email</option>
+                                                <option value="number">Number</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-6 form-group">
+                                           <input type="text" id="contact_info_field1" name="contactFieldText[1]" class=" form-control font-size11 control-size" placeholder="exmp: Enter your email address." value="Enter your email address.">
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-2 form-group font-size11 control-size">
+                                            <div class="checkbox"> 
+                                                <input type="hidden" name="contactFieldRequired[1]" value="NO">
+                                                <input type="checkbox" value="YES" name="contactFieldRequired[1]" class="contact_info_chk1">
+                                                <span>Mandatory</span> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group col-md-3">
+                                            <input type="hidden" name="contactFieldType[2]" value="number">
+                                            <select class="form-control font-size11 control-size" name="contactFieldType[2]" disabled="">
+                                                <option value="">--Select--</option>
+                                                <option value="name">Name</option>
+                                                <option value="email">Email</option>
+                                                <option value="number" selected="">Number</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-6 form-group">
+                                           <input type="text" id="contact_info_field2" placeholder="exmp: Enter your mobile number." name="contactFieldText[2]" class=" form-control font-size11 control-size" value="Enter your mobile number.">
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-2 form-group font-size11 control-size">
+                                            <div class="checkbox"> 
+                                                <input type="hidden" name="contactFieldRequired[2]" value="NO">
+                                                <input type="checkbox" value="YES" name="contactFieldRequired[2]" class="contact_info_chk2">
+                                                <span>Mandatory</span> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>    
+                            </div>
+                        </div>
                     </div>
                     <!-- /.box-body -->
                 </div>
             </div>
-            <!--Survey Add first box upper-->
-            <!--Survey Question using AJAX code start box-->
+            <!--Feedback Add first box upper-->
+            <!--Feedback Question using AJAX code start box-->
             <div class="" >
                 <div class="question">
                 <div class="col-md-7">
@@ -77,11 +196,13 @@
                                         ?>
                                     </select>
                                 </div>
+                                <?php $mandatoryCount=0;?>
                                 <div class="col-md-5">
-                                    <input type="hidden" name="mandatory[0]" value="NO">
-                                    <input type="checkbox" name="mandatory[0]" class="" value="YES" style="margin: 10px;">
+                                    <input type="hidden" name="mandatory<?=$mandatoryCount?>" value="NO">
+                                    <input type="checkbox" name="mandatory<?=$mandatoryCount?>" class="" value="YES" style="margin: 10px;">
                                     <label class="">Mandatory</label>
                                 </div>
+                                <?php $mandatoryCount++;?>
                             </div>
                         <!--Type 2,4,7,8,9,10 for use Div-->
                             <div class="col-md-12" id="select_type_option">
@@ -127,7 +248,7 @@
             </div>
 
 
-            <!--Survey Question using AJAX code end box-->
+            <!--Feedback Question using AJAX code end box-->
             <div class="col-md-12">
                 <button type="button" id="addQuestion" class="btn btn-default"><i class="fa fa-plus"></i> Add Question</button>
                 <input type="submit" name="submit" class="btn btn-success" value="Save & Close">
@@ -168,6 +289,32 @@
         var y = 1; //initlal text box count
        // var s_id = 10;
         var counter1 = 0;
+        var mandatory_field_count = "<?=$mandatoryCount; ?>";
+        
+        $("#is_info_required").click(function(){
+            var customerInfoIsRequired = ($("#is_info_required").is(":checked"))?"YES":"NO";
+            $(this).val(customerInfoIsRequired);
+            ($("#is_info_required").is(":checked"))?$('#contact_question').prop('required',true):$('#contact_question').removeAttr('required');
+
+            if($(this).val() == "YES") {
+                $("#customerInfoForm").slideDown(1000);
+            }
+            else {
+                $("#customerInfoForm").slideUp(1000);
+            }
+
+        });
+
+        // $(".contact_info_chk0").click(function(){
+        //     ($(this).is(":checked"))?$('input#contact_info_field0').attr("required",""):$('input#contact_info_field0').removeAttr("required");
+        // });
+        // $(".contact_info_chk1").click(function(){
+        //     ($(this).is(":checked"))?$('input#contact_info_field1').attr("required",""):$('input#contact_info_field1').removeAttr("required");
+        // });
+        // $(".contact_info_chk2").click(function(){
+        //     ($(this).is(":checked"))?$('input#contact_info_field2').attr("required",""):$('input#contact_info_field2').removeAttr("required");
+        // });
+        
         $(add_button).click(function (e) { 
             e.preventDefault();
             x++; //text box increment
@@ -197,7 +344,7 @@
                                     </select>\n\
                                 </div>\n\
                                 <div class="col-md-5">\n\
-                                    <input type="hidden" name="mandatory['+counter1+']" value="NO"><input type="checkbox" name="mandatory['+counter1+']" class="" value="YES" style="margin: 10px;">\n\
+                                    <input type="hidden" name="mandatory'+mandatory_field_count+'" value="NO"><input type="checkbox" name="mandatory'+mandatory_field_count+'" class="" value="YES" style="margin: 10px;">\n\
                                     <label class="">Mandatory</label>\n\
                                 </div>\n\
                             </div>\n\
@@ -226,6 +373,7 @@
                         </div>\n\
                 </div>\n\
                 </div>'); //add input box
+                mandatory_field_count++;
             }
             
             $.ajax({
@@ -331,7 +479,7 @@
                         $("#addDiv"+id).click(function() {
                             
                             $("#viewDiv"+id).append('<div id="viewDivDel'+id+b+'" class="input-group" style="margin:10px;"><input class="form-control" id="optionText'+id+b+'" type="text" name="optionName['+ counter1 +'][]" placeholder="" /><span class="input-group-btn"><button class="btn btn-default" id="dltOption">X</button></span></div>');
-                            $("#typeDiv"+id).append('<div class="" id="delDiv'+id+b+'"><div><div style="float: left; width: 40%;" id="optionTextView'+id+b+'">&nbsp;</div><div style="float: left; width: 60%;"><img src="<?= base_url(); ?>image/survey/multismiley.png" alt="Star" width="70%" align="middle"></div></div></div>');
+                            $("#typeDiv"+id).append('<div class="" id="delDiv'+id+b+'"><div><div style="float: left; width: 45%; margin:5px 0px;" id="optionTextView'+id+b+'">&nbsp;</div><div style="float: left; width: 55%; margin:5px 0px; "><img src="<?= base_url(); ?>image/survey/smiley.png" alt="Star" width="100%" align="middle"></div></div></div>');
                             
                             $('input[id^="optionText"]').on('input',function(){
                                 var data = $(this).val();
@@ -520,9 +668,11 @@
                          $("#numberRange_del"+id).remove();
                          $("#metrix_del"+id).remove();
                 }else if(selectOption == 5){
+                    var data_fields_mandatory_count = 0;
                     $("#viewDiv"+id).empty();
                     $("#typeDiv"+id).empty();
                     var g = 11;
+
                     $('#DataField'+id).html('<div id="DataField_del'+id+'"><div class="col-md-12">\n\
                                     <div class="form-group col-md-3">\n\
                                         <select class="form-control" name="optionData['+ counter1 +'][]">\n\
@@ -532,7 +682,6 @@
                                             <option value="checkbox">Checkbox</option>\n\
                                             <option value="number">Number</option>\n\
                                             <option value="date">Date</option>\n\
-                                            <option value="phone">Phone</option>\n\
                                         </select>\n\
                                     </div>\n\
                                     <div class="col-md-1"></div>\n\
@@ -541,7 +690,7 @@
                                     </div>\n\
                                     <div class="col-md-1"></div>\n\
                                     <div class="col-md-2 form-group">\n\
-                                        <div class="checkbox"> <input type="hidden" value="NO" name="dataFieldmen['+ counter1+'][]"><input type="checkbox" value="YES" name="dataFieldmen['+ counter1 +'][]"><span>Mandatory</span> </div>\n\
+                                        <div class="checkbox"> <input type="hidden" value="NO" name="dataFieldmen['+ counter1+']['+data_fields_mandatory_count+']"><input type="checkbox" value="YES" name="dataFieldmen['+ counter1 +']['+data_fields_mandatory_count+']"><span>Mandatory</span> </div>\n\
                                     </div>\n\
                                  </div>\n\
                                 <div class="" id="viewData'+id+'">\n\
@@ -550,6 +699,7 @@
                                     <div class="">\n\
                                         <button type="button" class="btn btn-default" id="addData'+id+'"><i class="fa fa-plus"></i> Add Field</button>\n\
                                     </div></div>');
+                            data_fields_mandatory_count++;
                          $("#addData"+id).click(function() {
                             $("#viewData"+id).append('<div class="col-md-12" id="delField'+id+g+'">\n\
                                     <div class="form-group col-md-3">\n\
@@ -560,7 +710,6 @@
                                             <option value="checkbox">Checkbox</option>\n\
                                             <option value="number">Number</option>\n\
                                             <option value="date">Date</option>\n\
-                                            <option value="phone">Phone</option>\n\
                                         </select>\n\
                                     </div>\n\
                                     <div class="col-md-1"></div>\n\
@@ -569,7 +718,7 @@
                                     </div>\n\
                                     <div class="col-md-1"></div>\n\
                                     <div class="col-md-2 form-group">\n\
-                                        <div class="checkbox"> <input type="hidden" value="NO" name="dataFieldmen['+ counter1 +'][]"><input type="checkbox" value="YES" name="dataFieldmen['+ counter1 +'][]"><span>Mandatory</span><span id="dltDataField"  class="btn btn-default" style="margin-left: 81px; margin-top: -47px;">X</span></div>\n\
+                                        <div class="checkbox"> <input type="hidden" value="NO" name="dataFieldmen['+ counter1 +']['+data_fields_mandatory_count+']"><input type="checkbox" value="YES" name="dataFieldmen['+ counter1 +']['+data_fields_mandatory_count+']"><span>Mandatory</span><span id="dltDataField"  class="btn btn-default" style="margin-left: 81px; margin-top: -47px;">X</span></div>\n\
                                     </div>\n\
                                  </div>');
                             $("#typeDiv"+id).append('<div id="delDiv'+id+g+'"><div><span id="optionTextView'+id+g+'">&nbsp;</span></div><div class=""><hr style="height:1px;border:none;color:#333;background-color:#333;" /></div></div>');
@@ -580,6 +729,7 @@
                                 $("#optionTextView"+check1).text(data);
                             });
                         g++;
+                        data_fields_mandatory_count++;
                         });
                         $('input[id^="optionText"]').on('input',function(){
                                 var data = $(this).val();
@@ -619,6 +769,7 @@
                     $("#DataField_del"+id).remove();
                     $("#metrix_del"+id).remove();
                 }else if(selectOption == 12){
+                    
                     $("#viewDiv"+id).empty();
                     $("#typeDiv"+id).empty();
                      var h = 11;
@@ -642,13 +793,27 @@
                                         </div>\n\
                                         <div class="" id="matrixAnsView'+id+'">\n\
                                         </div><br>\n\
-                                        <div class="">\n\
+                                        <div class="hidden">\n\
                                             <button type="button" class="btn btn-default" id="matrixAnsAdd'+id+'"><i class="fa fa-plus"></i> Add Option</button>\n\
                                         </div> \n\
                                         </div>\n\
                                 </div></div>');
                         //$('#typeDiv'+id).append('<div id="delMetrix'+id+h+'"><div class="col-md-6"><span id="optionTextView'+id+h+'"></span></div><div class="col-md-6" id="colss'+id+h+'"></div></div>');
+                        /**
+                         *D@ Static Add matrix question 
+                         */ 
+                        $('#matrixQuView'+id).append('<div id="matrixRow'+id+h+'" class="form-group" style="margin:10px;"><input id="optionText'+id+h+'" class="form-control" type="text" name="optionMetrix['+ counter1 +'][]" placeholder="" required/></div>');
+                        
+                        $('#typeDiv'+id).append('<div id="delMetrix'+id+h+'"><div class="col-md-6"><span id="optionTextView'+id+h+'"></span></div><div class="col-md-6"><div id="colss'+id+h+'"></div></div></div>');
+                        
+                        $('input[id^="optionText"]').on('input',function(){
+                            var data = $(this).val();
+                            var check1 = $(this).attr('id').slice(-4);
+                            $("#optionTextView"+check1).text(data);
+                        });
+                        
                         $('#matrixQuAdd'+id).click(function(){
+                            h=h+1;    
                             $('#matrixQuView'+id).append('<div id="matrixRow'+id+h+'" class="input-group" style="margin:10px;"><input id="optionText'+id+h+'" class="form-control" type="text" name="optionMetrix['+ counter1 +'][]" placeholder="" /><span class="input-group-btn"><button class="btn btn-default" id="dltOption">X</button></span></div>');
                             $('#typeDiv'+id).append('<div id="delMetrix'+id+h+'"><div class="col-md-6"><span id="optionTextView'+id+h+'"></span></div><div class="col-md-6"><div id="colss'+id+h+'"></div></div></div>');
                             //$('#typeDiv'+id).prepend($('#matrixAnsView'+id))
@@ -664,32 +829,48 @@
                             });
                         h++;    
                         });
-                            
+                        
+                        
                         $('input[id^="optionText"]').on('input',function(){
-                                var data = $(this).val();
-                                var check1 = $(this).attr('id').slice(-3);
+                            var data = $(this).val();
+                            var check1 = $(this).attr('id').slice(-3);
+                            if(!$.isNumeric(check1)) {
+                                // alert("alpha numeric");
                                 $("#optionTextView"+check1).text(data);
-                            });
+                            }else {
+                                // alert("numeric");
+                            }
+                            // $("#optionTextView"+check1).text(data);
+                        });
+                        
+
                         $('#matrixQuView'+id).on('click','#dltOption', function() {
                             var idx = $(this).closest('div').attr('id').slice(-4);
                             $(this).closest('div').remove();
                             $('#delMetrix'+idx).closest('div').remove();
                         });
                       //matrix in column Add
-                        $('#matrixAnsAdd'+id).click(function() {
-                            $('#matrixAnsView'+id).append('<div id="matrixCol'+id+hh_n+'" class="input-group" style="margin:10px;"><input id="columnText'+id+hh_n+'" class="form-control" type="text" name="metrixAnswer['+ counter1 +'][]" placeholder="" /><span class="input-group-btn"><button class="btn btn-default" id="dltOption">X</button></span></div>');
-                            if(hh_n > 11){
-                                $('.columnAdd'+id).append('<div class="option9 del_type'+id+hh_n+' columnTextView'+id+hh_n+'" style="border-color: rgb(106, 193, 131); color: rgb(106, 193, 131);">&nbsp;</div>');
-                            }else{
-                                $('#colss'+id+hh_n).append('<div class="option9 del_type'+id+hh_n+' columnTextView'+id+hh_n+'" style="border-color: rgb(106, 193, 131); background-color: rgb(106, 193, 131); color: rgb(255, 255, 255);">&nbsp;</div><div class="columnAdd'+id+'"></div>');
-                            }
+                        // $('#matrixAnsAdd'+id).click(function() {
+                            $('#matrixAnsView'+id).append('<div id="matrixColumn'+id+'1" class="form-group" style="margin:10px;"><input id="columnTextf'+id+'1" class="form-control" type="text" name="metrixAnswer['+counter1+'][0]" placeholder="" value="Agree" /></div> <div id="matrixColumn'+id+'2" class="form-group" style="margin:10px;"><input id="columnTextf'+id+'2" class="form-control" type="text" name="metrixAnswer['+counter1+'][1]" placeholder="" value="Neutral"/></div><div id="matrixColumn'+id+'3" class="form-group" style="margin:10px;"><input id="columnTextf'+id+'3" class="form-control" type="text" name="metrixAnswer['+counter1+'][2]" placeholder="" value="Disagree" /></div>');
+
+                            $('#colss'+id+hh_n).append('<div class="option9 sd del_type'+id+hh_n+' columnTextView'+id+hh_n+'" style="border-color: rgb(106, 193, 131); background-color: rgb(106, 193, 131); color: rgb(255, 255, 255);">Agree</div><div class="columnAdd'+id+'"></div>');
+
+                            $('.columnAdd'+id).append('<div class="option9 del_type'+id+hh_n+' columnTextView'+id+hh_n+'" style="border-color: rgb(106, 193, 131); color: rgb(106, 193, 131);">Neutral</div><div class="option9 del_type'+id+hh_n+' columnTextView'+id+hh_n+'" style="border-color: rgb(106, 193, 131); color: rgb(106, 193, 131);">Disagree</div>');
+
+                            // if(hh_n > 11){
+                            //     $('.columnAdd'+id).append('<div class="option9 del_type'+id+hh_n+' columnTextView'+id+hh_n+'" style="border-color: rgb(106, 193, 131); color: rgb(106, 193, 131);">&nbsp;</div>');
+                            // }else{
+                            //     $('#colss'+id+hh_n).append('<div class="option9 sd del_type'+id+hh_n+' columnTextView'+id+hh_n+'" style="border-color: rgb(106, 193, 131); background-color: rgb(106, 193, 131); color: rgb(255, 255, 255);">&nbsp;</div><div class="columnAdd'+id+'"></div>');
+                                
+                            // }
+
                             $('input[id^="columnText"]').on('input',function(){
                                 var data = $(this).val();
                                 var check1 = $(this).attr('id').slice(-4);
                                 $(".columnTextView"+check1).text(data);
                             });
-                        hh_n++;
-                        });
+                        // hh_n++;
+                        // });
                         $('input[id^="columnText"]').on('input',function(){
                                 var data = $(this).val();
                                 var check1 = $(this).attr('id').slice(-3);
@@ -722,7 +903,7 @@
             e.preventDefault();
            // if($("div.order").lenght > 1){
                 $(this).parent().parent().parent().parent().parent().closest('div').remove();
-                x--;
+                // x--;
                 $('div.order').text(function (y){
                     return y + 2;
                 });
@@ -739,7 +920,6 @@
    // $(document).ready(function() {
         $('select[id^="survey_select_1"]').on('change', function() {
            // $(this).find("option:selected").each(function(){
-                
                 var id=$(this).attr('id').slice(-1);
                 var selectOption1 = $(this).val();
               
@@ -816,7 +996,7 @@
                         $("#addDiv1").click(function() {
                            // alert('M-Smily');
                             $("#viewDiv1").append('<div id="viewDivDel'+id+bb+'" class="input-group" style="margin:10px;"><input id="optionTextf'+id+bb+'" class="form-control" type="text" name="optionName[0][]" placeholder="" /><span class="input-group-btn"><button class="btn btn-default" id="dltOption">X</button></span></div>');
-                            $("#typeDiv1").append('<div class="" id="delDiv'+id+bb+'"><div><div style="float: left; width: 40%;" id="optionTextViewf'+id+bb+'">&nbsp;</div><div style="float: left; width: 60%;"><img src="<?= base_url(); ?>image/survey/multismiley.png" alt="Star" width="70%" align="middle"></div></div></div>');
+                            $("#typeDiv1").append('<div class="" id="delDiv'+id+bb+'"><div><div style="float: left; width: 45%;margin:5px 0px;" id="optionTextViewf'+id+bb+'">&nbsp;</div><div style="float: left; width: 55%; margin:5px 0px;"><img src="<?= base_url(); ?>image/survey/smiley.png" alt="Star" width="100%" align="middle"></div></div></div>');
                             $('input[id^="optionTextf"]').on('input',function(){
                                 var data = $(this).val();
                                 var check1 = $(this).attr('id').slice(-3);
@@ -991,6 +1171,7 @@
                 }else if(selectOption1 == 5){
                 $("#typeDiv1").empty();
                 var gg = 11;
+                var data_fields_mandatory_count = 0;
                 $('#DataField').html('<div id="DataField_del">\n\
                                 <div class="col-md-12">\n\
                                     <div class="form-group col-md-3">\n\
@@ -1001,20 +1182,20 @@
                                             <option value="checkbox">Checkbox</option>\n\
                                             <option value="number">Number</option>\n\
                                             <option value="date">Date</option>\n\
-                                            <option value="phone">Phone</option>\n\
                                         </select>\n\
                                     </div>\n\
                                     <div class="col-md-1"></div><div class="col-md-6 form-group">\n\
                                         <input type="text" id="optionTextf'+id+'1" name="dataField[0][]" class="form-control">\n\
                                     </div><div class="col-md-1"></div><div class="col-md-2 form-group"><div class="checkbox">\n\
-                                            <input type="hidden" name="dataFieldmen[0][]" value="NO">\n\
-                                            <input type="checkbox" value="YES" name="dataFieldmen[0][]"><span>Mandatory</span> </div></div>\n\
+                                            <input type="hidden" name="dataFieldmen[0]['+data_fields_mandatory_count+']" value="NO">\n\
+                                            <input type="checkbox" value="YES" name="dataFieldmen[0]['+data_fields_mandatory_count+']"><span>Mandatory</span> </div></div>\n\
                                  </div>\n\
                                 <div class="" id="viewData1"></div>\n\
                                 <div class="">\n\
                                     <button type="button" class="btn btn-default" id="addData1"><i class="fa fa-plus"></i> Add Field</button>\n\
                                 </div>\n\
                                 </div>');
+                    data_fields_mandatory_count++;
                          $("#addData1").click(function() {
                             $("#viewData1").append('<div class="col-md-12" id="delField'+id+gg+'">\n\
                                     <div class="form-group col-md-3">\n\
@@ -1025,7 +1206,6 @@
                                             <option value="checkbox">Checkbox</option>\n\
                                             <option value="number">Number</option>\n\
                                             <option value="date">Date</option>\n\
-                                            <option value="phone">Phone</option>\n\
                                         </select>\n\
                                     </div>\n\
                                     <div class="col-md-1"></div>\n\
@@ -1034,7 +1214,7 @@
                                     </div>\n\
                                     <div class="col-md-1"></div>\n\
                                     <div class="col-md-2 form-group">\n\
-                                        <div class="checkbox"> <input type="hidden" value="NO" name="dataFieldmen[0][]"><input type="checkbox" value="YES" name="dataFieldmen[0][]"><span>Mandatory</span><span id="dltDataField"  class="btn btn-default" style="margin-left: 81px; margin-top: -47px;">X</span></div>\n\
+                                        <div class="checkbox"> <input type="hidden" value="NO" name="dataFieldmen[0]['+data_fields_mandatory_count+']"><input type="checkbox" value="YES" name="dataFieldmen[0]['+data_fields_mandatory_count+']"><span>Mandatory</span><span id="dltDataField"  class="btn btn-default" style="margin-left: 81px; margin-top: -47px;">X</span></div>\n\
                                     </div>\n\
                                  </div>');
                             $("#typeDiv1").append('<div id="del_type'+id+gg+'"><div><span id="optionTextViewf'+id+gg+'">&nbsp;</span></div><div class=""><hr style="height:1px;border:none;color:#333;background-color:#333;" /></div></div>');
@@ -1045,6 +1225,7 @@
                                 $("#optionTextViewf"+check1).text(data);
                             });
                         gg++;
+                        data_fields_mandatory_count++;
                         });
                         $('input[id^="optionTextf"]').on('input',function(){
                                 var data = $(this).val();
@@ -1088,10 +1269,22 @@
                                     <div class="form-group"><label class="control-label" for="parameterValue"><b>Answer Columns</b></label>\n\
                                         <div class="" style="margin:10px;"><!--<input class="form-control" type="text" name="metrixAnswer[0][]" placeholder="" />--></div>\n\
                                         <div class="" id="matrixAnsView1"></div><br>\n\
-                                        <div class=""><button type="button" class="btn btn-default" id="matrixAnsAdd"><i class="fa fa-plus"></i> Add Option</button></div> \n\
+                                        <div class="hidden"><button type="button" class="btn btn-default" id="matrixAnsAdd"><i class="fa fa-plus"></i> Add Option</button></div> \n\
                                     </div>\n\
                                 </div>');
+
+                        $('#matrixQuView1').append('<div id="matrix'+id+hh+'" class="form-group" style="margin:10px;"><input id="optionTextf'+id+hh+'" class="form-control" type="text" name="optionMetrix[0][]" placeholder="" required/></div>');
+
+                        $('#typeDiv1').append('<div id="delMetrix'+id+hh+'"><div class="col-md-6"><span id="optionTextViewf'+id+hh+'"></span></div><div class="col-md-6"><div id="colss1'+hh+'"></div></div></div>');
+
+                        $('input[id^="optionTextf"]').on('input',function(){
+                                var data = $(this).val();
+                                var check1 = $(this).attr('id').slice(-3);
+                                $("#optionTextViewf"+check1).text(data);
+                            });
+
                         $('#matrixQuAdd').click(function(){
+                           hh=hh+1; 
                             $('#matrixQuView1').append('<div id="matrix'+id+hh+'" class="input-group" style="margin:10px;"><input id="optionTextf'+id+hh+'" class="form-control" type="text" name="optionMetrix[0][]" placeholder="" /><span class="input-group-btn"><button class="btn btn-default" id="dltOption">X</button></span></div>');
                             $('#typeDiv1').append('<div id="delMetrix'+id+hh+'"><div class="col-md-6"><span id="optionTextViewf'+id+hh+'"></span></div><div class="col-md-6"><div id="colss1'+hh+'"></div></div></div>');
                             var cl1 = hh-1;
@@ -1116,21 +1309,27 @@
                             $('#delMetrix'+idx).closest('div').remove();
                         });
                       //matrix in column Add
-                        $('#matrixAnsAdd').click(function() {
-                            $('#matrixAnsView1').append('<div id="matrixColumn'+id+hhh+'" class="input-group" style="margin:10px;"><input id="columnTextf'+id+hhh+'" class="form-control" type="text" name="metrixAnswer[0][]" placeholder="" /><span class="input-group-btn"><button class="btn btn-default" id="dltOption">X</button></span></div>');
-                            if(hhh > 11){
-                                $('.mDivCol-1').append('<div id="" class="option9 del_type'+id+hhh+' columnTextViewf'+id+hhh+'" style="border-color: rgb(106, 193, 131); color: rgb(106, 193, 131);">&nbsp;</div>');
-                            }else{
-                                $('#colss1'+hhh).append('<div class="option9 columnTextViewf'+id+hhh+'"" style="border-color: rgb(106, 193, 131); background-color: rgb(106, 193, 131); color: rgb(255, 255, 255);">&nbsp;</div><div class="mDivCol-1"></div>');
-                            }
+                        // $('#matrixAnsAdd').click(function() {
+                            $('#matrixAnsView1').append('<div id="matrixColumn'+id+'1" class="form-group" style="margin:10px;"><input id="columnTextf'+id+'1" class="form-control" type="text" name="metrixAnswer[0][0]" placeholder="" value="Agree" /></div> <div id="matrixColumn'+id+'2" class="form-group" style="margin:10px;"><input id="columnTextf'+id+'2" class="form-control" type="text" name="metrixAnswer[0][1]" placeholder="" value="Neutral"/></div><div id="matrixColumn'+id+'3" class="form-group" style="margin:10px;"><input id="columnTextf'+id+'3" class="form-control" type="text" name="metrixAnswer[0][2]" placeholder="" value="Disagree"/></div>');
+
+                            $('#colss1'+hhh).append('<div class="option9 columnTextViewf'+id+hhh+'"" style="border-color: rgb(106, 193, 131); background-color: rgb(106, 193, 131); color: rgb(255, 255, 255);">Agree</div><div class="mDivCol-1"></div>');
+                            $('.mDivCol-1').append('<div id="" class="option9 del_type'+id+hhh+' columnTextViewf'+id+hhh+'" style="border-color: rgb(106, 193, 131); color: rgb(106, 193, 131);"> Neutral </div> <div id="" class="option9 del_type'+id+hhh+' columnTextViewf'+id+hhh+'" style="border-color: rgb(106, 193, 131); color: rgb(106, 193, 131);">Disagree</div>');
+                            // if(hhh > 11){
+                                // $('.mDivCol-1').append('<div id="" class="option9 del_type'+id+hhh+' columnTextViewf'+id+hhh+'" style="border-color: rgb(106, 193, 131); color: rgb(106, 193, 131);">&nbsp;</div>');
+                            // }else{
+                                // $('#colss1'+hhh).append('<div class="option9 columnTextViewf'+id+hhh+'"" style="border-color: rgb(106, 193, 131); background-color: rgb(106, 193, 131); color: rgb(255, 255, 255);">&nbsp;</div><div class="mDivCol-1"></div>');
+
+                                
+
+                            // }
                             
                             $('input[id^="columnTextf"]').on('input',function(){
                                 var data = $(this).val();
                                 var check1 = $(this).attr('id').slice(-3);
                                 $(".columnTextViewf"+check1).text(data);
                             });
-                        hhh++;
-                        });
+                        // hhh++;
+                        // });
                         $('#matrixAnsView1').on('click','#dltOption', function() {
                             var idx = $(this).closest('div').attr('id').slice(-3);
                             $(this).closest('div').remove();

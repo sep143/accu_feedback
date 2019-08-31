@@ -69,7 +69,7 @@ class Excel_export_Controller extends MY_Controller{
 
         $waiter_id = $this->input->post('waiter_id1');
         $device_id = $this->input->post('device_id1');
-        $fileName = 'data-' . time() . '.xlsx';
+        $fileName = 'data-' . time();
         // load excel library
         $this->load->library('excel');
         $sql = "select * from survey_answer1 where survey_id='".$survey_id."' and restaurant_id='".$id."' and answer_date >= '".$startDate."' and answer_date < ('".$endDate."' + INTERVAL 1 DAY) ";
@@ -95,6 +95,7 @@ class Excel_export_Controller extends MY_Controller{
         $i = 1;
         $ques_array = array();
         $q_seq = array();
+        
         foreach ($json_data['question'] as $Qcount=> $Qrow):
             $ques_array[] = $json_data['question'][$Qcount]['text']['en'];
             array_push($q_seq, $json_data['question'][$Qcount]['sequence_no']);
@@ -115,6 +116,7 @@ class Excel_export_Controller extends MY_Controller{
             $star=0; $smiley=0; $nps=0; $mstar=0;
             $star_total=0; $smiley_total=0; $nps_total=0; $mstar_total=0;
             foreach ($json_table['response'] as $j_count=>$j_view){
+                
                 if(in_array($json_table['response'][$j_count]['sequence_no'], $q_seq)){
                 $q_id=0;
                 $check = $json_table['response'][$j_count]['type'];
@@ -246,6 +248,7 @@ class Excel_export_Controller extends MY_Controller{
         $score = round($score_cal, 2);
         $xl = $score;
         array_push($x12, $xl);
+      
             $objPHPExcel->getActiveSheet()->SetCellValue('A' . $rowCount, $t_view+1);
             $objPHPExcel->getActiveSheet()->SetCellValue('B' . $rowCount, $t_row->device_info);
             $objPHPExcel->getActiveSheet()->SetCellValue('C' . $rowCount, date('Y-m-d', strtotime($t_row->answer_date)));
@@ -262,11 +265,19 @@ class Excel_export_Controller extends MY_Controller{
 //            $objPHPExcel->getActiveSheet()->SetCellValue('E' . $rowCount, $element['mobile']);
             $rowCount++;
         }
-        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
-        $objWriter->save('uploads/excel/' . $fileName);
+        //$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+     //     $jsondata =  $objWriter;
+    //    echo "<pre>";
+    //    print_r($jsondata);
+     //   $objWriter->save('uploads/excel/' . $fileName);
+     
         // download file
-        header("Content-Type: application/vnd.ms-excel");
-        redirect('uploads/excel/' . $fileName);
+        header('Content-type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment; filename="' . $fileName . '.xls"');
+        $objWriter->save('php://output');
+       // redirect('uploads/excel/' . $fileName);
     }
     
     public function check_excel(){
@@ -278,7 +289,7 @@ class Excel_export_Controller extends MY_Controller{
        echo $waiter_id = $this->input->post('waiter_id1');
        echo '<br>';
        echo $device_id = $this->input->post('device_id1');
-        $fileName = 'data-' . time() . '.xlsx';
+        $fileName = 'data-' . time();
         // load excel library
         $this->load->library('excel');
         $sql = "select * from survey_answer1 where survey_id='".$survey_id."' and restaurant_id='".$id."' and answer_date >= '".$startDate."' and answer_date < ('".$endDate."' + INTERVAL 1 DAY) ";

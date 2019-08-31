@@ -21,6 +21,7 @@
                         $data['devices'] = $this->Commen_model->get_devices($id);
                         $data['activeSurvey1'] = $this->Commen_model->unique_get_survey($id);
                         $data['deviceGraph'] = $this->Commen_model->survey_view_graph($id);
+
 			$data['view'] = 'admin/dashboard/index';
 			$this->load->view('admin/layout', $data);
 		}

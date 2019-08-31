@@ -54,6 +54,8 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 // setting route for admin
+
+$route['privacypolicy'] = 'welcome/privacy_policy';
 $route['admin'] = 'admin/auth';
 $route['login'] = 'admin/LoginController/login';
 $route['super-admin'] = 'super_admin/LoginController/login';
@@ -96,7 +98,12 @@ $route['expired/restaurant'] = 'super_admin/Users/expired_restaurant';
 //Enquiry View
 $route['enquiry/list'] = 'super_admin/EnquiryController/enquiry_list';
 $route['enquiry/view/(:num)'] = 'super_admin/EnquiryController/enquiry_view/$1';
-
+//language
+$route['language/list'] = 'super_admin/SettingSuperController';
+$route['language/add'] = 'super_admin/SettingSuperController/languageAdd';
+$route['language/edit_get'] = 'super_admin/SettingSuperController/getLanguage';
+$route['language/update'] = 'super_admin/SettingSuperController/updateLanguage';
+$route['language/change_status'] = 'super_admin/SettingSuperController/updateStatus';
 
 $route['adminlte'] = 'admin/auth';
 $route['adminlte/(:any)'] = 'admin/adminlte/$1';
@@ -108,7 +115,8 @@ $route['adminLogin'] = 'admin/LoginController/index';
 $route['api/loginAPI'] = 'admin/api/Example/login/';
 $route['api/userAPI/(:any)'] = 'admin/api/Example/user/$1';
 //get survey form data
-$route['api/surveyAPI/(:any)'] = 'admin/api/Example/survey/$1';
+//$route['api/surveyAPI/(:any)'] = 'admin/api/Example/survey/$1';
+$route['api/surveyAPI/(:any)'] = 'admin/api/SurveyAPIController/survey/$1';
 $route['api/surveyAPI'] = 'admin/api/Example/survey/';
 
 //Extra URL Short 
